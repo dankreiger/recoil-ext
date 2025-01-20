@@ -1,0 +1,19 @@
+{
+  "name": "recoil-ext",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "bun build ./src/index.ts --outdir ./dist",
+    "test": "bun test",
+    "format": "biome format . --write",
+    "lint": "biome check .",
+    "lint:fix": "biome check . --apply",
+    "prepare": "bun run build",
+    "release": "release-it"
+  },
+  "devDependencies": {},
+  "dependencies": {},
+  "publishConfig": {
+    "access": "public"
+  }
+}
