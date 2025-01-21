@@ -1,4 +1,20 @@
-- [recoil-ext](#recoil-ext)
+# Recoil Ext
+
+Some very small utilities for Recoil including an entity adapter, a dev tool debugger, and indexeddb persistence.
+
+Bundle sizes for different formats:
+
+| Format | Raw Size | Gzipped |
+|--------|----------|---------|
+| ESM    | 3.97 KB  | ~1.4 KB |
+| CJS    | 4.48 KB  | ~1.5 KB |
+| IIFE   | 534 KB   | ~145 KB |
+
+You will most likely use ESM, but CJS and IIFE are included for compatibility with older systems / use via public CDNs (e.g. <https://unpkg.com/recoil-ext@0.1.11/dist/index.global.js>
+)
+
+- [Recoil Ext](#recoil-ext)
+- [recoil-ext](#recoil-ext-1)
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
   - [Features](#features)
@@ -32,7 +48,8 @@
 
 ## Table of Contents
 
-- [recoil-ext](#recoil-ext)
+- [Recoil Ext](#recoil-ext)
+- [recoil-ext](#recoil-ext-1)
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
   - [Features](#features)

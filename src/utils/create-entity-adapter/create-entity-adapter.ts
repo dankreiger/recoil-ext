@@ -10,14 +10,10 @@ import {
 /**
  * Creates an "Entity Adapter" for managing normalized state in Recoil.
  * @template T The entity type
- * @template K The key of T that should be used as the ID
  */
-export function createEntityAdapter<
-	T extends object,
-	K extends keyof T,
->(options: {
+export function createEntityAdapter<T extends object>(options: {
 	key: string;
-	idKey: K;
+	idKey: keyof T;
 	initialState?: ReadonlyArray<T> | T;
 	sortComparer?: (a: T, b: T) => number;
 }): EntityAdapter<T> {

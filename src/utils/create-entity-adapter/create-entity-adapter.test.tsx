@@ -16,7 +16,7 @@ describe("createEntityAdapter", () => {
 	describe("with default idKey", () => {
 		it("should add, update, and remove entities", () => {
 			// Create an adapter with a custom sort, for example
-			const userAdapter = createEntityAdapter<User, "id">({
+			const userAdapter = createEntityAdapter<User>({
 				key: "UserTestAtom_DefaultIdKey",
 				idKey: "id",
 				// We'll sort by 'createdAt' descending
@@ -91,7 +91,7 @@ describe("createEntityAdapter", () => {
 
 		it("should work with 'slug' as the ID key", () => {
 			// Create an adapter that uses 'slug' instead of 'id'
-			const bookAdapter = createEntityAdapter<Book, "slug">({
+			const bookAdapter = createEntityAdapter<Book>({
 				key: "BookTestAtom_CustomIdKey",
 				idKey: "slug",
 				initialState: [
@@ -186,7 +186,7 @@ describe("createEntityAdapter", () => {
 
 	describe("bulk operations", () => {
 		it("should handle adding multiple entities at once", () => {
-			const userAdapter = createEntityAdapter<User, "id">({
+			const userAdapter = createEntityAdapter<User>({
 				key: "BulkUserTestAtom_BulkOps",
 				idKey: "id",
 				sortComparer: (a, b) => b.createdAt - a.createdAt,
@@ -214,7 +214,7 @@ describe("createEntityAdapter", () => {
 		});
 
 		it("should handle updating multiple entities", () => {
-			const userAdapter = createEntityAdapter<User, "id">({
+			const userAdapter = createEntityAdapter<User>({
 				key: "BulkUpdateTestAtom_BulkOps",
 				idKey: "id",
 			});
@@ -251,7 +251,7 @@ describe("createEntityAdapter", () => {
 
 	describe("error handling", () => {
 		it("should handle attempting to update non-existent entities", () => {
-			const userAdapter = createEntityAdapter<User, "id">({
+			const userAdapter = createEntityAdapter<User>({
 				key: "ErrorTestAtom_ErrorHandling",
 				idKey: "id",
 			});
@@ -275,7 +275,7 @@ describe("createEntityAdapter", () => {
 
 	describe("entity selection", () => {
 		it("should select entities by predicate", () => {
-			const userAdapter = createEntityAdapter<User, "id">({
+			const userAdapter = createEntityAdapter<User>({
 				key: "SelectionTestAtom_EntitySelection",
 				idKey: "id",
 				sortComparer: (a, b) => b.createdAt - a.createdAt,
@@ -307,7 +307,7 @@ describe("createEntityAdapter", () => {
 
 	describe("edge cases", () => {
 		it("should handle empty updates", () => {
-			const userAdapter = createEntityAdapter<User, "id">({
+			const userAdapter = createEntityAdapter<User>({
 				key: "EdgeCaseTestAtom_EdgeCases",
 				idKey: "id",
 			});
@@ -344,7 +344,7 @@ describe("createEntityAdapter", () => {
 				{ id: "user2", name: "Bob", createdAt: 2000 },
 			] as const;
 
-			const userAdapter = createEntityAdapter<User, "id">({
+			const userAdapter = createEntityAdapter<User>({
 				key: "NormalizeTestAtom",
 				idKey: "id",
 				initialState: users,
@@ -358,7 +358,7 @@ describe("createEntityAdapter", () => {
 		});
 
 		it("should handle empty arrays", () => {
-			const userAdapter = createEntityAdapter<User, "id">({
+			const userAdapter = createEntityAdapter<User>({
 				key: "EmptyNormalizeTestAtom",
 				idKey: "id",
 				initialState: [],
@@ -381,7 +381,7 @@ describe("createEntityAdapter", () => {
 				{ id: "user1", name: "Alice", createdAt: 1000 },
 				{ id: "user2", name: "Bob", createdAt: 2000 },
 			] as const;
-			const userAdapter = createEntityAdapter<User, "id">({
+			const userAdapter = createEntityAdapter<User>({
 				key: "SortedNormalizeTestAtom",
 				idKey: "id",
 
@@ -407,7 +407,7 @@ describe("createEntityAdapter", () => {
 				{ id: "user1", name: "Alice", createdAt: 1000 },
 			]);
 
-			const userAdapter1 = createEntityAdapter<User, "id">({
+			const userAdapter1 = createEntityAdapter<User>({
 				key: "SortedNormalizeTestAtom1",
 				idKey: "id",
 
@@ -427,7 +427,7 @@ describe("createEntityAdapter", () => {
 
 		it("should use custom selectId if provided", () => {
 			const users = [{ id: "user1", name: "Alice", createdAt: 1000 }] as const;
-			const userAdapter = createEntityAdapter<User, "id">({
+			const userAdapter = createEntityAdapter<User>({
 				key: "CustomIdNormalizeTestAtom",
 				idKey: "id",
 				initialState: users,
@@ -446,7 +446,7 @@ describe("createEntityAdapter", () => {
 				{ id: "user2", name: "Bob", createdAt: 2000 },
 			] as const;
 
-			const userAdapter = createEntityAdapter<User, "name">({
+			const userAdapter = createEntityAdapter<User>({
 				key: "NormalizeTestAtom1",
 				idKey: "name",
 				initialState: users,
@@ -467,7 +467,7 @@ describe("createEntityAdapter", () => {
 				{ id: "user2", name: "Bob", createdAt: 2000 },
 			] as const;
 
-			const userAdapter = createEntityAdapter<User, "id">({
+			const userAdapter = createEntityAdapter<User>({
 				key: "CurrentStateTestAtom",
 				idKey: "id",
 				initialState: users,
@@ -492,7 +492,7 @@ describe("createEntityAdapter", () => {
 				{ id: "user2", name: "Bob", createdAt: 2000 },
 			] as const;
 
-			const userAdapter = createEntityAdapter<User, "id">({
+			const userAdapter = createEntityAdapter<User>({
 				key: "CurrentStateTestAtom",
 				idKey: "id",
 				initialState: users,
@@ -517,7 +517,7 @@ describe("createEntityAdapter", () => {
 				{ id: "user1", name: "Alice", createdAt: 1000 },
 				{ id: "user2", name: "Bob", createdAt: 2000 },
 			] as const;
-			const userAdapter = createEntityAdapter<User, "name">({
+			const userAdapter = createEntityAdapter<User>({
 				key: "CurrentStateTestAtom1",
 				idKey: "name",
 				initialState: users,
