@@ -87,7 +87,7 @@ export interface EntityAdapter<T, Id extends string | number> {
 	 * }
 	 * ```
 	 */
-	readonly useAllEntities: () => ReadonlyArray<T>;
+	readonly createUseAllEntities: () => ReadonlyArray<T>;
 
 	/**
 	 * Creates a hook that returns a single entity by its ID.

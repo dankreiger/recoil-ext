@@ -38,14 +38,14 @@ export function createEntityAdapter<
 		default: initialState,
 	} as const);
 
-	const { useAllEntities, createUseOneEntity, createUseEntityActions } =
+	const { createUseAllEntities, createUseOneEntity, createUseEntityActions } =
 		createEntityHooks(key, entityAtom, selectId, sortComparer);
 
 	return {
 		getInitialState: () => initialState,
 		entityAtom,
-		useAllEntities: useAllEntities(),
-		createUseOneEntity: createUseOneEntity(),
-		createUseEntityActions: createUseEntityActions(),
+		createUseAllEntities: () => createUseAllEntities(),
+		createUseOneEntity: (id: Id) => createUseOneEntity(id),
+		createUseEntityActions: () => createUseEntityActions(),
 	};
 }

@@ -221,6 +221,7 @@ function createEntityAdapter<T, K extends keyof T>(options: {
   initialState?: T[];    // Optional initial entities
 }): {
   useAllEntities: () => T[];
+
   createUseEntityActions: () => {
     addOne: (entity: T) => void;
     addMany: (entities: T[]) => void;

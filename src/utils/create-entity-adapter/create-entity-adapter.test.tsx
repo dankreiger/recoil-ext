@@ -23,11 +23,11 @@ describe("createEntityAdapter", () => {
 			});
 
 			// Render a hook that uses:
-			// - useAllEntities: read all user entities
+			// - createUseAllEntities: read all user entities
 			// - createUseEntityActions: get a set of actions (addOne, removeOne, etc.)
 			const { result } = renderHook(
 				() => {
-					const allUsers = userAdapter.useAllEntities();
+					const allUsers = userAdapter.createUseAllEntities();
 					const actions = userAdapter.createUseEntityActions();
 					return { allUsers, actions };
 				},
@@ -89,68 +89,96 @@ describe("createEntityAdapter", () => {
 			const bookAdapter = createEntityAdapter<Book, "slug">({
 				key: "BookTestAtom",
 				idKey: "slug",
+				initialState: [
+					{ slug: "book-1", title: "Recoil with Custom Slug", createdAt: 1000 },
+					{ slug: "book-2", title: "Newer Book", createdAt: 2000 },
+				],
 				// Example: sort by createdAt descending
 				sortComparer: (a, b) => b.createdAt - a.createdAt,
 			});
 
 			// Render a hook that uses:
-			// - useAllEntities: read all book entities
+			// - createUseAllEntities: read all book entities
 			// - createUseEntityActions: get actions (addOne, removeOne, etc.)
 			const { result } = renderHook(
 				() => {
-					const allBooks = bookAdapter.useAllEntities();
+					const allBooks = bookAdapter.createUseAllEntities();
 					const actions = bookAdapter.createUseEntityActions();
 					return { allBooks, actions };
 				},
 				{ wrapper: RecoilRoot },
 			);
 
-			// Initially, there should be no books
-			expect(result.current.allBooks).toHaveLength(0);
+			// Initially, there are 2 books
+			expect(result.current.allBooks).toHaveLength(2);
 
 			// Add one book
 			act(() => {
 				result.current.actions.addOne({
-					slug: "book-1",
-					title: "Recoil with Custom Slug",
-					createdAt: 1000,
+					slug: "book-3",
+					title: "Recoil is a bit old",
+					createdAt: 3000,
 				});
 			});
-			expect(result.current.allBooks).toHaveLength(1);
-			expect(result.current.allBooks[0].title).toBe("Recoil with Custom Slug");
+			console.log(result.current.allBooks);
+			expect(result.current.allBooks).toHaveLength(3);
+			expect(result.current.allBooks[0].title).toBe("Recoil is a bit old");
 
 			// Add another book with a newer timestamp (should appear first after sorting)
 			act(() => {
 				result.current.actions.addOne({
-					slug: "book-2",
-					title: "Newer Book",
-					createdAt: 2000,
+					slug: "book-5",
+					title: "Wauwau",
+					createdAt: 500,
 				});
 			});
-			expect(result.current.allBooks).toHaveLength(2);
+			expect(result.current.allBooks).toHaveLength(4);
 
 			// Because we sort descending by createdAt, "Newer Book" should come first
-			expect(result.current.allBooks[0].title).toBe("Newer Book");
+			expect(result.current.allBooks[0].title).toBe("Recoil is a bit old");
 
-			expect(result.current.allBooks[1].title).toBe("Recoil with Custom Slug");
+			expect(result.current.allBooks[1].title).toBe("Newer Book");
 
 			// Update book-1's title
 			act(() => {
 				// @ts-expect-error - hi
-				result.current.actions.updateOne("book-1", {
-					slug: "book-1",
-					title: "Updated Recoil Book",
+				result.current.actions.updateOne("book-6", {
+					slug: "book-6",
+					title: "Recoil Book",
 				});
 			});
-			expect(result.current.allBooks[1].title).toBe("Updated Recoil Book");
+			expect(result.current.allBooks[1].title).toBe("Newer Book");
 
 			// Remove book-2
+
+			expect(result.current.allBooks).toEqual([
+				{
+					createdAt: 3000,
+					slug: "book-3",
+					title: "Recoil is a bit old",
+				},
+				{
+					createdAt: 2000,
+					slug: "book-2",
+					title: "Newer Book",
+				},
+				{
+					createdAt: 1000,
+					slug: "book-1",
+					title: "Recoil with Custom Slug",
+				},
+				{
+					createdAt: 500,
+					slug: "book-5",
+					title: "Wauwau",
+				},
+			]);
 			act(() => {
 				// @ts-expect-error - hi
 				result.current.actions.removeOne("book-2");
 			});
-			expect(result.current.allBooks).toHaveLength(1);
-			expect(result.current.allBooks[0].slug).toBe("book-1");
+			expect(result.current.allBooks).toHaveLength(3);
+			expect(result.current.allBooks[0].slug).toBe("book-3");
 		});
 	});
 
@@ -164,7 +192,7 @@ describe("createEntityAdapter", () => {
 
 			const { result } = renderHook(
 				() => {
-					const allUsers = userAdapter.useAllEntities();
+					const allUsers = userAdapter.createUseAllEntities();
 					const actions = userAdapter.createUseEntityActions();
 					return { allUsers, actions };
 				},
@@ -191,7 +219,7 @@ describe("createEntityAdapter", () => {
 
 			const { result } = renderHook(
 				() => ({
-					allUsers: userAdapter.useAllEntities(),
+					allUsers: userAdapter.createUseAllEntities(),
 					actions: userAdapter.createUseEntityActions(),
 				}),
 				{ wrapper: RecoilRoot },
@@ -228,7 +256,7 @@ describe("createEntityAdapter", () => {
 
 			const { result } = renderHook(
 				() => ({
-					allUsers: userAdapter.useAllEntities(),
+					allUsers: userAdapter.createUseAllEntities(),
 					actions: userAdapter.createUseEntityActions(),
 				}),
 				{ wrapper: RecoilRoot },
@@ -253,7 +281,7 @@ describe("createEntityAdapter", () => {
 
 			const { result } = renderHook(
 				() => ({
-					allUsers: userAdapter.useAllEntities(),
+					allUsers: userAdapter.createUseAllEntities(),
 					actions: userAdapter.createUseEntityActions(),
 				}),
 				{ wrapper: RecoilRoot },
@@ -284,7 +312,7 @@ describe("createEntityAdapter", () => {
 
 			const { result } = renderHook(
 				() => ({
-					allUsers: userAdapter.useAllEntities(),
+					allUsers: userAdapter.createUseAllEntities(),
 					actions: userAdapter.createUseEntityActions(),
 				}),
 				{ wrapper: RecoilRoot },
@@ -320,7 +348,7 @@ describe("createEntityAdapter", () => {
 				initialState: users,
 			});
 
-			const { result } = renderHook(() => userAdapter.useAllEntities(), {
+			const { result } = renderHook(() => userAdapter.createUseAllEntities(), {
 				wrapper: RecoilRoot,
 			});
 
@@ -339,7 +367,7 @@ describe("createEntityAdapter", () => {
 				entities: {},
 			});
 
-			const { result } = renderHook(() => userAdapter.useAllEntities(), {
+			const { result } = renderHook(() => userAdapter.createUseAllEntities(), {
 				wrapper: RecoilRoot,
 			});
 
@@ -366,7 +394,7 @@ describe("createEntityAdapter", () => {
 				},
 			});
 
-			const { result } = renderHook(() => userAdapter.useAllEntities(), {
+			const { result } = renderHook(() => userAdapter.createUseAllEntities(), {
 				wrapper: RecoilRoot,
 			});
 
@@ -402,7 +430,7 @@ describe("createEntityAdapter", () => {
 				initialState: users,
 			});
 
-			const { result } = renderHook(() => userAdapter.useAllEntities(), {
+			const { result } = renderHook(() => userAdapter.createUseAllEntities(), {
 				wrapper: RecoilRoot,
 			});
 
@@ -421,7 +449,7 @@ describe("createEntityAdapter", () => {
 				initialState: users,
 			});
 
-			const { result } = renderHook(() => userAdapter.useAllEntities(), {
+			const { result } = renderHook(() => userAdapter.createUseAllEntities(), {
 				wrapper: RecoilRoot,
 			});
 

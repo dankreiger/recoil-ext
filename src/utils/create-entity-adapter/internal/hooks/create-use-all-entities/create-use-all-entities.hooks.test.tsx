@@ -29,8 +29,7 @@ describe("createUseAllEntities", () => {
 	);
 
 	it("should return all entities in order of ids", () => {
-		const hook = createUseAllEntities(testAtom);
-		const { result } = renderHook(() => hook(), {
+		const { result } = renderHook(() => createUseAllEntities(testAtom), {
 			wrapper,
 		});
 
@@ -52,8 +51,7 @@ describe("createUseAllEntities", () => {
 			default: emptyState,
 		});
 
-		const hook = createUseAllEntities(emptyAtom);
-		const { result } = renderHook(() => hook(), {
+		const { result } = renderHook(() => createUseAllEntities(emptyAtom), {
 			wrapper,
 		});
 
@@ -73,8 +71,7 @@ describe("createUseAllEntities", () => {
 			default: singleState,
 		});
 
-		const hook = createUseAllEntities(singleAtom);
-		const { result } = renderHook(() => hook(), {
+		const { result } = renderHook(() => createUseAllEntities(singleAtom), {
 			wrapper,
 		});
 
@@ -96,10 +93,12 @@ describe("createUseAllEntities", () => {
 			default: nonSequentialState,
 		});
 
-		const hook = createUseAllEntities(nonSequentialAtom);
-		const { result } = renderHook(() => hook(), {
-			wrapper,
-		});
+		const { result } = renderHook(
+			() => createUseAllEntities(nonSequentialAtom),
+			{
+				wrapper,
+			},
+		);
 
 		expect(result.current).toEqual([
 			{ id: 10, name: "Ten" },
