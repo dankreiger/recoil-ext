@@ -9,7 +9,7 @@ import { createEntityHooks, normalize } from "./internal";
  * @template Id The type of the ID (defaults to the type of T[K])
  */
 export function createEntityAdapter<
-	T extends { [K in keyof T]: T[K] },
+	T extends { [key: string]: unknown },
 	K extends keyof T,
 	Id extends string | number = T[K] extends string | number ? T[K] : never,
 >(options: {

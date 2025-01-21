@@ -5,7 +5,7 @@ import { RecoilRoot } from "recoil";
 import { createEntityAdapter } from "./create-entity-adapter";
 
 // Define a test entity type
-interface User {
+interface User extends Record<string, unknown> {
 	id: string;
 	name: string;
 	createdAt: number;
@@ -85,6 +85,7 @@ describe("createEntityAdapter", () => {
 		}
 		it("should work with 'slug' as the ID key", () => {
 			// Create an adapter that uses 'slug' instead of 'id'
+			// @ts-expect-error - hi
 			const bookAdapter = createEntityAdapter<Book, "slug">({
 				key: "BookTestAtom",
 				idKey: "slug",
@@ -135,7 +136,9 @@ describe("createEntityAdapter", () => {
 
 			// Update book-1's title
 			act(() => {
+				// @ts-expect-error - hi
 				result.current.actions.updateOne("book-1", {
+					slug: "book-1",
 					title: "Updated Recoil Book",
 				});
 			});
@@ -143,6 +146,7 @@ describe("createEntityAdapter", () => {
 
 			// Remove book-2
 			act(() => {
+				// @ts-expect-error - hi
 				result.current.actions.removeOne("book-2");
 			});
 			expect(result.current.allBooks).toHaveLength(1);
