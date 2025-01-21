@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.10](https://github.com/dankreiger/recoil-ext/compare/v0.1.9...v0.1.10) (2025-01-21)
+
+
+### Bug Fixes
+
+* update types ([a782fde](https://github.com/dankreiger/recoil-ext/commit/a782fdeb819996498513aec58c54e12ddc26d1c8))
+* update types ([27ae9e7](https://github.com/dankreiger/recoil-ext/commit/27ae9e72ae966ec31023b6c170e788b3cd9d186b))
+
 ## [0.1.9](https://github.com/dankreiger/recoil-ext/compare/v0.1.8...v0.1.9) (2025-01-21)
 
 
