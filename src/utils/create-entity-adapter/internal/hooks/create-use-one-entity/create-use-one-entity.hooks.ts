@@ -1,22 +1,19 @@
 import { type RecoilState, selectorFamily, useRecoilValue } from "recoil";
-import type { EntityState } from "../..";
+import type { EntityId, EntityState } from "../..";
 
-export const createUseOneEntity = <
-	T extends { [K in keyof T]: T[K] },
-	Id extends string | number,
->(
+export const createUseOneEntity = <T extends { [K in keyof T]: T[K] }>(
 	key: string,
-	entityAtom: RecoilState<EntityState<T, Id>>,
+	entityAtom: RecoilState<EntityState<T>>,
 ) => {
-	const entitySelector = selectorFamily<T | undefined, Id>({
+	const entitySelector = selectorFamily<T | undefined, EntityId>({
 		key: `${key}_entitySelector`,
 		get:
-			(id: Id) =>
+			(id: EntityId) =>
 			({ get }) => {
 				const state = get(entityAtom);
 				return state.entities[id];
 			},
 	});
 
-	return (id: Id): T | undefined => useRecoilValue(entitySelector(id));
+	return (id: EntityId): T | undefined => useRecoilValue(entitySelector(id));
 };

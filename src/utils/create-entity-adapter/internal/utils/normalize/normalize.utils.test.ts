@@ -49,7 +49,7 @@ describe("normalize", () => {
 	});
 
 	it("should handle empty array input", () => {
-		const result = normalize<TestEntity, number>([], (entity) => entity.id);
+		const result = normalize<TestEntity>([], (entity) => entity.id);
 
 		expect(result).toEqual({
 			ids: [],

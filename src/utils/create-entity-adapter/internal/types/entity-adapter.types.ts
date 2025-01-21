@@ -1,11 +1,10 @@
-import type { RecoilState } from "recoil";
 import type { EntityState } from "./entity-state.types";
 
 /**
  * A powerful adapter for managing normalized entity state in Recoil.
  *
  * @template T - The entity type (must have an id field)
- * @template Id - The type of the entity's ID (string | number)
+ * @template Id - The type of the entity's ID (EntityId)
  *
  * @example
  * ```typescript
@@ -34,30 +33,12 @@ import type { EntityState } from "./entity-state.types";
  * - Consider using batch updates (addMany, updateMany) for multiple operations
  * - Leverage the readonly types to prevent accidental mutations
  */
-export interface EntityAdapter<
-	T,
-	Id extends string | number = string | number,
-> {
-	/**
-	 * The core Recoil atom that stores the entity state.
-	 * This atom contains both the entities and their IDs in a normalized format.
-	 *
-	 * @performance O(1) access to the entire state
-	 *
-	 * @example
-	 * ```typescript
-	 * const entityState = useRecoilValue(adapter.entityAtom);
-	 * console.log(entityState.ids); // ['1', '2', '3']
-	 * console.log(entityState.entities); // { '1': { id: '1', ... }, ... }
-	 * ```
-	 */
-	readonly entityAtom: RecoilState<EntityState<T, Id>>;
-
+export interface EntityAdapter<T> {
 	/**
 	 * Returns a fresh, empty entity state object.
 	 * Use this to initialize your entity state when needed.
 	 *
-	 * @returns {EntityState<T, Id>} A new entity state with empty ids and entities
+	 * @returns {EntityState<T>} A new entity state with empty ids and entities
 	 *
 	 * @example
 	 * ```typescript
@@ -65,7 +46,7 @@ export interface EntityAdapter<
 	 * // Result: { ids: [], entities: {} }
 	 * ```
 	 */
-	readonly getInitialState: () => EntityState<T, Id>;
+	readonly getInitialState: () => EntityState<T>;
 
 	/**
 	 * A hook that returns all entities as an array.
@@ -111,7 +92,7 @@ export interface EntityAdapter<
 	 * }
 	 * ```
 	 */
-	readonly useOneEntity: (id: Id) => T | undefined;
+	readonly useOneEntity: (id: EntityId) => T | undefined;
 
 	/**
 	 * Creates an object containing all entity CRUD operations.
@@ -199,7 +180,7 @@ export interface EntityAdapter<
 		 * actions.removeOne('1'); // Removes user with id '1'
 		 * ```
 		 */
-		readonly removeOne: (id: Id) => void;
+		readonly removeOne: (id: EntityId) => void;
 
 		/**
 		 * Removes multiple entities from the state by their IDs.
@@ -215,7 +196,7 @@ export interface EntityAdapter<
 		 * actions.removeMany(['1', '2']); // Removes users with ids '1' and '2'
 		 * ```
 		 */
-		readonly removeMany: (ids: ReadonlyArray<Id>) => void;
+		readonly removeMany: (ids: ReadonlyArray<EntityId>) => void;
 
 		/**
 		 * Removes all entities from the state.
@@ -243,7 +224,7 @@ export interface EntityAdapter<
 		 * actions.updateOne('1', { name: 'Alice 2.0' }); // Only updates name
 		 * ```
 		 */
-		readonly updateOne: (id: Id, changes: Partial<T>) => void;
+		readonly updateOne: (id: EntityId, changes: Partial<T>) => void;
 
 		/**
 		 * Updates multiple entities by applying partial changes.
@@ -265,9 +246,11 @@ export interface EntityAdapter<
 		 */
 		readonly updateMany: (
 			updates: ReadonlyArray<{
-				readonly id: Id;
+				readonly id: EntityId;
 				readonly changes: Partial<T>;
 			}>,
 		) => void;
 	};
 }
+
+export type EntityId = string | number;

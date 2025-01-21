@@ -1,5 +1,6 @@
 import { type RecoilState, useSetRecoilState } from "recoil";
 import {
+	type EntityId,
 	type EntityState,
 	addManyUpdater,
 	addOneUpdater,
@@ -12,12 +13,9 @@ import {
 	upsertOneUpdater,
 } from "../..";
 
-export const createUseEntityActions = <
-	T extends { [K in keyof T]: T[K] },
-	Id extends string | number,
->(
-	entityAtom: RecoilState<EntityState<T, Id>>,
-	selectId: (entity: T) => Id,
+export const createUseEntityActions = <T extends { [K in keyof T]: T[K] }>(
+	entityAtom: RecoilState<EntityState<T>>,
+	selectId: (entity: T) => EntityId,
 	sortComparer?: (a: T, b: T) => number,
 ) => {
 	return () => {
@@ -25,43 +23,45 @@ export const createUseEntityActions = <
 
 		return {
 			addOne: (entity: T) => {
-				setEntities((prev: EntityState<T, Id>) =>
+				setEntities((prev: EntityState<T>) =>
 					addOneUpdater(prev, entity, selectId, sortComparer),
 				);
 			},
 			addMany: (entities: ReadonlyArray<T>) => {
-				setEntities((prev: EntityState<T, Id>) =>
+				setEntities((prev: EntityState<T>) =>
 					addManyUpdater(prev, entities, selectId, sortComparer),
 				);
 			},
 			upsertOne: (entity: T) => {
-				setEntities((prev: EntityState<T, Id>) =>
+				setEntities((prev: EntityState<T>) =>
 					upsertOneUpdater(prev, entity, selectId, sortComparer),
 				);
 			},
 			setAll: (entities: ReadonlyArray<T>) => {
-				setEntities((prev: EntityState<T, Id>) =>
+				setEntities((prev: EntityState<T>) =>
 					setAllUpdater(prev, entities, selectId, sortComparer),
 				);
 			},
-			updateOne: (id: Id, changes: Partial<T>) => {
-				setEntities((prev: EntityState<T, Id>) =>
+			updateOne: (id: EntityId, changes: Partial<T>) => {
+				setEntities((prev: EntityState<T>) =>
 					updateOneUpdater(prev, { id, changes }, sortComparer),
 				);
 			},
-			updateMany: (updates: ReadonlyArray<{ id: Id; changes: Partial<T> }>) => {
-				setEntities((prev: EntityState<T, Id>) =>
+			updateMany: (
+				updates: ReadonlyArray<{ id: EntityId; changes: Partial<T> }>,
+			) => {
+				setEntities((prev: EntityState<T>) =>
 					updateManyUpdater(prev, updates, sortComparer),
 				);
 			},
-			removeOne: (id: Id) => {
-				setEntities((prev: EntityState<T, Id>) => removeOneUpdater(prev, id));
+			removeOne: (id: EntityId) => {
+				setEntities((prev: EntityState<T>) => removeOneUpdater(prev, id));
 			},
-			removeMany: (ids: ReadonlyArray<Id>) => {
-				setEntities((prev: EntityState<T, Id>) => removeManyUpdater(prev, ids));
+			removeMany: (ids: ReadonlyArray<EntityId>) => {
+				setEntities((prev: EntityState<T>) => removeManyUpdater(prev, ids));
 			},
 			removeAll: () => {
-				setEntities((prev: EntityState<T, Id>) => removeAllUpdater(prev));
+				setEntities((prev: EntityState<T>) => removeAllUpdater(prev));
 			},
 		};
 	};

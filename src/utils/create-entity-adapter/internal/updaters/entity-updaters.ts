@@ -1,14 +1,14 @@
-import type { EntityState, EntityUpdate } from "../types";
+import type { EntityId, EntityState, EntityUpdate } from "../types";
 
 export function addOneUpdater<
 	T extends { [K in keyof T]: T[K] },
-	Id extends string | number,
+	Id extends EntityId,
 >(
-	state: EntityState<T, Id>,
+	state: EntityState<T>,
 	entity: T,
 	selectId: (entity: T) => Id,
 	sortComparer?: (a: T, b: T) => number,
-): EntityState<T, Id> {
+): EntityState<T> {
 	const id = selectId(entity);
 	if (id in state.entities) {
 		return state;
@@ -20,13 +20,13 @@ export function addOneUpdater<
 
 export function addManyUpdater<
 	T extends { [K in keyof T]: T[K] },
-	Id extends string | number,
+	Id extends EntityId,
 >(
-	state: EntityState<T, Id>,
+	state: EntityState<T>,
 	entities: ReadonlyArray<T>,
 	selectId: (entity: T) => Id,
 	sortComparer?: (a: T, b: T) => number,
-): EntityState<T, Id> {
+): EntityState<T> {
 	if (!entities.length) return state;
 	let changed = false;
 	const newEntities = { ...state.entities } as Record<Id, T>;
@@ -43,7 +43,7 @@ export function addManyUpdater<
 
 	if (!changed) return state;
 
-	const newState: EntityState<T, Id> = {
+	const newState: EntityState<T> = {
 		ids: [...idsSet],
 		entities: newEntities,
 	};
@@ -52,13 +52,13 @@ export function addManyUpdater<
 
 export function upsertOneUpdater<
 	T extends { [K in keyof T]: T[K] },
-	Id extends string | number,
+	Id extends EntityId,
 >(
-	state: EntityState<T, Id>,
+	state: EntityState<T>,
 	entity: T,
 	selectId: (entity: T) => Id,
 	sortComparer?: (a: T, b: T) => number,
-): EntityState<T, Id> {
+): EntityState<T> {
 	const id = selectId(entity);
 	const exists = id in state.entities;
 	if (!exists) {
@@ -67,7 +67,7 @@ export function upsertOneUpdater<
 		return reSort({ ids: newIds, entities: newEntities }, sortComparer);
 	}
 	const newEntities = { ...state.entities, [id]: entity };
-	const newState: EntityState<T, Id> = {
+	const newState: EntityState<T> = {
 		ids: state.ids,
 		entities: newEntities,
 	};
@@ -76,13 +76,13 @@ export function upsertOneUpdater<
 
 export function setAllUpdater<
 	T extends { [K in keyof T]: T[K] },
-	Id extends string | number,
+	Id extends EntityId,
 >(
-	_: EntityState<T, Id>,
+	_: EntityState<T>,
 	entities: ReadonlyArray<T>,
 	selectId: (entity: T) => Id,
 	sortComparer?: (a: T, b: T) => number,
-): EntityState<T, Id> {
+): EntityState<T> {
 	const newEntities = {} as Record<Id, T>;
 	const ids: Id[] = [];
 	for (const e of entities) {
@@ -90,7 +90,7 @@ export function setAllUpdater<
 		newEntities[eId] = e;
 		ids.push(eId);
 	}
-	let newState: EntityState<T, Id> = {
+	let newState: EntityState<T> = {
 		ids,
 		entities: newEntities,
 	};
@@ -100,12 +100,12 @@ export function setAllUpdater<
 
 export function updateOneUpdater<
 	T extends { [K in keyof T]: T[K] },
-	Id extends string | number,
+	Id extends EntityId,
 >(
-	state: EntityState<T, Id>,
+	state: EntityState<T>,
 	update: EntityUpdate<T, Id>,
 	sortComparer?: (a: T, b: T) => number,
-): EntityState<T, Id> {
+): EntityState<T> {
 	const { id, changes } = update;
 	if (!(id in state.entities)) {
 		return state;
@@ -113,7 +113,7 @@ export function updateOneUpdater<
 	const oldEntity = state.entities[id];
 	const newEntity = { ...oldEntity, ...changes };
 	const newEntities = { ...state.entities, [id]: newEntity };
-	const newState: EntityState<T, Id> = {
+	const newState: EntityState<T> = {
 		ids: state.ids,
 		entities: newEntities,
 	};
@@ -122,12 +122,12 @@ export function updateOneUpdater<
 
 export function updateManyUpdater<
 	T extends { [K in keyof T]: T[K] },
-	Id extends string | number,
+	Id extends EntityId,
 >(
-	state: EntityState<T, Id>,
+	state: EntityState<T>,
 	updates: ReadonlyArray<EntityUpdate<T, Id>>,
 	sortComparer?: (a: T, b: T) => number,
-): EntityState<T, Id> {
+): EntityState<T> {
 	if (!updates.length) return state;
 	let changed = false;
 	const newEntities = { ...state.entities } as Record<Id, T>;
@@ -158,8 +158,8 @@ export function updateManyUpdater<
 
 export function removeOneUpdater<
 	T extends { [K in keyof T]: T[K] },
-	Id extends string | number,
->(state: EntityState<T, Id>, id: Id): EntityState<T, Id> {
+	Id extends EntityId,
+>(state: EntityState<T>, id: Id): EntityState<T> {
 	if (!(id in state.entities)) {
 		return state;
 	}
@@ -172,16 +172,16 @@ export function removeOneUpdater<
 	};
 }
 
-export function removeManyUpdater<
-	T extends { [K in keyof T]: T[K] },
-	Id extends string | number,
->(state: EntityState<T, Id>, ids: ReadonlyArray<Id>): EntityState<T, Id> {
+export function removeManyUpdater<T extends { [K in keyof T]: T[K] }>(
+	state: EntityState<T>,
+	ids: ReadonlyArray<EntityId>,
+): EntityState<T> {
 	if (!ids.length) return state;
 	const idsToRemove = new Set(ids);
 	const newIds = state.ids.filter((id) => !idsToRemove.has(id));
 	if (newIds.length === state.ids.length) return state;
 
-	const newEntities = { ...state.entities } as Record<Id, T>;
+	const newEntities = { ...state.entities } as Record<EntityId, T>;
 	for (const id of ids) {
 		delete newEntities[id];
 	}
@@ -194,8 +194,8 @@ export function removeManyUpdater<
 
 export function removeAllUpdater<
 	T extends { [K in keyof T]: T[K] },
-	Id extends string | number,
->(state: EntityState<T, Id>): EntityState<T, Id> {
+	Id extends EntityId,
+>(state: EntityState<T>): EntityState<T> {
 	if (!state.ids.length) return state;
 	return {
 		ids: [],
@@ -203,13 +203,10 @@ export function removeAllUpdater<
 	};
 }
 
-export function reSort<
-	T extends { [K in keyof T]: T[K] },
-	Id extends string | number,
->(
-	state: EntityState<T, Id>,
+export function reSort<T extends { [K in keyof T]: T[K] }, Id extends EntityId>(
+	state: EntityState<T>,
 	comparer?: (a: T, b: T) => number,
-): EntityState<T, Id> {
+): EntityState<T> {
 	const newIds = [...state.ids];
 	const defaultComparer = (a: T, b: T) => {
 		if ("createdAt" in a && "createdAt" in b) {

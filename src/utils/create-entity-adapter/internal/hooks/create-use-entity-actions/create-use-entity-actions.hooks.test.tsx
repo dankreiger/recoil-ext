@@ -11,12 +11,12 @@ interface TestEntity extends Record<string, unknown> {
 }
 
 describe("createUseEntityActions", () => {
-	const initialState: EntityState<TestEntity, number> = {
+	const initialState: EntityState<TestEntity> = {
 		ids: [],
 		entities: {},
 	};
 
-	const testAtom = atom<EntityState<TestEntity, number>>({
+	const testAtom = atom<EntityState<TestEntity>>({
 		key: "testEntityState",
 		default: initialState,
 	});

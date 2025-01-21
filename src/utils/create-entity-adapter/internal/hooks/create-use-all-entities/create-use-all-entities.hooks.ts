@@ -1,9 +1,9 @@
 import { type RecoilState, useRecoilValue } from "recoil";
-import type { EntityState } from "../..";
+import type { EntityId, EntityState } from "../..";
 
-export const createUseAllEntities = <T, Id extends string | number = string>(
-	entityAtom: RecoilState<EntityState<T, Id>>,
+export const createUseAllEntities = <T>(
+	inputAtom: RecoilState<EntityState<T>>,
 ): ReadonlyArray<T> => {
-	const entityState = useRecoilValue(entityAtom);
-	return entityState.ids.map((id: Id) => entityState.entities[id]);
+	const entityState = useRecoilValue(inputAtom);
+	return entityState.ids.map((id: EntityId) => entityState.entities[id]);
 };

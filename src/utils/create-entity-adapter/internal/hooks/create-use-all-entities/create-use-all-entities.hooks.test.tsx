@@ -17,9 +17,9 @@ describe("createUseAllEntities", () => {
 			2: { id: 2, name: "Beta" },
 			3: { id: 3, name: "Gamma" },
 		},
-	} as const satisfies EntityState<TestEntity, number>;
+	} as const satisfies EntityState<TestEntity>;
 
-	const testAtom = atom<EntityState<TestEntity, number>>({
+	const testAtom = atom<EntityState<TestEntity>>({
 		key: "testEntities",
 		default: initialState,
 	});
@@ -44,9 +44,9 @@ describe("createUseAllEntities", () => {
 		const emptyState = {
 			ids: [],
 			entities: {},
-		} as const satisfies EntityState<TestEntity, number>;
+		} as const satisfies EntityState<TestEntity>;
 
-		const emptyAtom = atom<EntityState<TestEntity, number>>({
+		const emptyAtom = atom<EntityState<TestEntity>>({
 			key: "emptyEntities",
 			default: emptyState,
 		});
@@ -64,9 +64,9 @@ describe("createUseAllEntities", () => {
 			entities: {
 				1: { id: 1, name: "Solo" },
 			},
-		} as const satisfies EntityState<TestEntity, number>;
+		} as const satisfies EntityState<TestEntity>;
 
-		const singleAtom = atom<EntityState<TestEntity, number>>({
+		const singleAtom = atom<EntityState<TestEntity>>({
 			key: "singleEntity",
 			default: singleState,
 		});
@@ -86,9 +86,9 @@ describe("createUseAllEntities", () => {
 				5: { id: 5, name: "Five" },
 				99: { id: 99, name: "NinetyNine" },
 			},
-		} as const satisfies EntityState<TestEntity, number>;
+		} as const satisfies EntityState<TestEntity>;
 
-		const nonSequentialAtom = atom<EntityState<TestEntity, number>>({
+		const nonSequentialAtom = atom<EntityState<TestEntity>>({
 			key: "nonSequentialEntities",
 			default: nonSequentialState,
 		});

@@ -1,14 +1,15 @@
 import { describe, expect, it } from "bun:test";
 
 import { act, renderHook } from "@testing-library/react";
-import { RecoilRoot } from "recoil";
+import { RecoilRoot, atom } from "recoil";
 import { createEntityAdapter } from "./create-entity-adapter";
+import type { EntityState } from "./internal";
 
 // Define a test entity type
-interface User extends Record<string, unknown> {
-	id: string;
-	name: string;
-	createdAt: number;
+interface User {
+	readonly id: string;
+	readonly name: string;
+	readonly createdAt: number;
 }
 
 describe("createEntityAdapter", () => {
@@ -16,7 +17,7 @@ describe("createEntityAdapter", () => {
 		it("should add, update, and remove entities", () => {
 			// Create an adapter with a custom sort, for example
 			const userAdapter = createEntityAdapter<User, "id">({
-				key: "UserTestAtom",
+				key: "UserTestAtom_DefaultIdKey",
 				idKey: "id",
 				// We'll sort by 'createdAt' descending
 				sortComparer: (a, b) => b.createdAt - a.createdAt,
@@ -83,10 +84,15 @@ describe("createEntityAdapter", () => {
 			title: string;
 			createdAt: number;
 		}
+
+		const bookAtom = atom<EntityState<Book>>({
+			key: "BookTestAtom_CustomIdKey",
+		});
+
 		it("should work with 'slug' as the ID key", () => {
 			// Create an adapter that uses 'slug' instead of 'id'
 			const bookAdapter = createEntityAdapter<Book, "slug">({
-				key: "BookTestAtom",
+				key: "BookTestAtom_CustomIdKey",
 				idKey: "slug",
 				initialState: [
 					{ slug: "book-1", title: "Recoil with Custom Slug", createdAt: 1000 },
@@ -181,7 +187,7 @@ describe("createEntityAdapter", () => {
 	describe("bulk operations", () => {
 		it("should handle adding multiple entities at once", () => {
 			const userAdapter = createEntityAdapter<User, "id">({
-				key: "BulkUserTestAtom",
+				key: "BulkUserTestAtom_BulkOps",
 				idKey: "id",
 				sortComparer: (a, b) => b.createdAt - a.createdAt,
 			});
@@ -209,7 +215,7 @@ describe("createEntityAdapter", () => {
 
 		it("should handle updating multiple entities", () => {
 			const userAdapter = createEntityAdapter<User, "id">({
-				key: "BulkUpdateTestAtom",
+				key: "BulkUpdateTestAtom_BulkOps",
 				idKey: "id",
 			});
 
@@ -246,7 +252,7 @@ describe("createEntityAdapter", () => {
 	describe("error handling", () => {
 		it("should handle attempting to update non-existent entities", () => {
 			const userAdapter = createEntityAdapter<User, "id">({
-				key: "ErrorTestAtom",
+				key: "ErrorTestAtom_ErrorHandling",
 				idKey: "id",
 			});
 
@@ -270,7 +276,7 @@ describe("createEntityAdapter", () => {
 	describe("entity selection", () => {
 		it("should select entities by predicate", () => {
 			const userAdapter = createEntityAdapter<User, "id">({
-				key: "SelectionTestAtom",
+				key: "SelectionTestAtom_EntitySelection",
 				idKey: "id",
 				sortComparer: (a, b) => b.createdAt - a.createdAt,
 			});
@@ -302,7 +308,7 @@ describe("createEntityAdapter", () => {
 	describe("edge cases", () => {
 		it("should handle empty updates", () => {
 			const userAdapter = createEntityAdapter<User, "id">({
-				key: "EdgeCaseTestAtom",
+				key: "EdgeCaseTestAtom_EdgeCases",
 				idKey: "id",
 			});
 
@@ -378,6 +384,7 @@ describe("createEntityAdapter", () => {
 			const userAdapter = createEntityAdapter<User, "id">({
 				key: "SortedNormalizeTestAtom",
 				idKey: "id",
+
 				initialState: users,
 				sortComparer: (a, b) => b.createdAt - a.createdAt, // reverse (highest first)
 			});
@@ -403,6 +410,7 @@ describe("createEntityAdapter", () => {
 			const userAdapter1 = createEntityAdapter<User, "id">({
 				key: "SortedNormalizeTestAtom1",
 				idKey: "id",
+
 				initialState: users,
 				sortComparer: (a, b) => a.createdAt - b.createdAt, // reverse (lowest first)
 			});
@@ -422,6 +430,7 @@ describe("createEntityAdapter", () => {
 			const userAdapter = createEntityAdapter<User, "id">({
 				key: "CustomIdNormalizeTestAtom",
 				idKey: "id",
+
 				selectId: (user) => `custom_${user.id}`,
 				initialState: users,
 			});

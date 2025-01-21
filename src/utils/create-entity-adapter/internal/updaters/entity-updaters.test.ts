@@ -16,7 +16,7 @@ interface TestEntity extends Record<string, unknown> {
 
 describe("Entity Updaters", () => {
 	const selectId = (entity: TestEntity) => entity.id;
-	let initialState: EntityState<TestEntity, number>;
+	let initialState: EntityState<TestEntity>;
 
 	beforeEach(() => {
 		initialState = {

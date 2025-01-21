@@ -17,9 +17,9 @@ describe("createUseOneEntity", () => {
 			2: { id: 2, name: "Beta" },
 			3: { id: 3, name: "Gamma" },
 		},
-	} as const satisfies EntityState<TestEntity, number>;
+	} as const satisfies EntityState<TestEntity>;
 
-	const testAtom = atom<EntityState<TestEntity, number>>({
+	const testAtom = atom<EntityState<TestEntity>>({
 		key: "testEntities_test",
 		default: initialState,
 	});
@@ -56,9 +56,9 @@ describe("createUseOneEntity", () => {
 		const emptyState = {
 			ids: [],
 			entities: {},
-		} as const satisfies EntityState<TestEntity, number>;
+		} as const satisfies EntityState<TestEntity>;
 
-		const emptyAtom = atom<EntityState<TestEntity, number>>({
+		const emptyAtom = atom<EntityState<TestEntity>>({
 			key: "emptyEntities_test",
 			default: emptyState,
 		});
@@ -135,9 +135,9 @@ describe("createUseOneEntity", () => {
 				b: { id: "b", value: 2 },
 				c: { id: "c", value: 3 },
 			},
-		} as const satisfies EntityState<StringIdEntity, string>;
+		} as const satisfies EntityState<StringIdEntity>;
 
-		const stringIdAtom = atom<EntityState<StringIdEntity, string>>({
+		const stringIdAtom = atom<EntityState<StringIdEntity>>({
 			key: "stringIdEntities_test",
 			default: stringIdState,
 		});

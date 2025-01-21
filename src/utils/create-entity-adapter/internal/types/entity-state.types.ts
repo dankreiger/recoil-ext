@@ -1,12 +1,11 @@
-export interface EntityState<
-	T extends { [K in keyof T]: T[K] },
-	Id extends string | number = string,
-> {
-	readonly ids: ReadonlyArray<Id>;
-	readonly entities: Readonly<Record<Id, T>>;
+import type { EntityId } from "./entity-adapter.types";
+
+export interface EntityState<T extends { [K in keyof T]: T[K] }> {
+	readonly ids: ReadonlyArray<EntityId>;
+	readonly entities: Readonly<Record<EntityId, T>>;
 }
 
-export interface EntityUpdate<T, Id extends string | number = string> {
+export interface EntityUpdate<T, Id extends EntityId = string> {
 	readonly id: Id;
 	readonly changes: Readonly<Partial<T>>;
 }

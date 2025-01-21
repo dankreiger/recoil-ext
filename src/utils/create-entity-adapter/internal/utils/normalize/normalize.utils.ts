@@ -1,12 +1,12 @@
-import type { EntityState } from "../../types";
+import type { EntityId, EntityState } from "../../types";
 
-export const normalize = <T, Id extends string | number>(
+export const normalize = <T>(
 	entities: ReadonlyArray<T>,
-	selectId: (entity: T) => Id,
+	selectId: (entity: T) => EntityId,
 	sortComparer?: (a: T, b: T) => number,
-): EntityState<T, Id> => {
-	const ids: Id[] = [];
-	const entitiesMap = {} as Record<Id, T>;
+): EntityState<T> => {
+	const ids: EntityId[] = [];
+	const entitiesMap = {} as Record<EntityId, T>;
 
 	for (const entity of entities) {
 		const id = selectId(entity);
