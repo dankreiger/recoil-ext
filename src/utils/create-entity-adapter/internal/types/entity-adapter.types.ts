@@ -39,7 +39,7 @@ export interface EntityAdapter<T> {
 	 *
 	 * @returns {EntityState<T>} The current state of the entity adapter
 	 */
-	readonly getCurrentState: () => EntityState<T>;
+	readonly useCurrentState: () => EntityState<T>;
 
 	/**
 	 * Returns a fresh, empty entity state object.
@@ -49,11 +49,11 @@ export interface EntityAdapter<T> {
 	 *
 	 * @example
 	 * ```typescript
-	 * const initialState = adapter.getInitialState();
+	 * const initialState = adapter.useInitialState();
 	 * // Result: { ids: [], entities: {} }
 	 * ```
 	 */
-	readonly getInitialState: () => EntityState<T>;
+	readonly useInitialState: () => EntityState<T>;
 
 	/**
 	 * A hook that returns all entities as an array.

@@ -364,7 +364,7 @@ describe("createEntityAdapter", () => {
 				initialState: [],
 			});
 
-			expect(userAdapter.getInitialState()).toEqual({
+			expect(userAdapter.useInitialState()).toEqual({
 				ids: [],
 				entities: {},
 			});
@@ -389,7 +389,7 @@ describe("createEntityAdapter", () => {
 				sortComparer: (a, b) => b.createdAt - a.createdAt, // reverse (highest first)
 			});
 
-			expect(userAdapter.getInitialState()).toEqual({
+			expect(userAdapter.useInitialState()).toEqual({
 				ids: ["user2", "user1"],
 				entities: {
 					user2: { id: "user2", name: "Bob", createdAt: 2000 },
@@ -416,7 +416,7 @@ describe("createEntityAdapter", () => {
 			});
 
 			// lower createdAt first
-			expect(userAdapter1.getInitialState()).toEqual({
+			expect(userAdapter1.useInitialState()).toEqual({
 				ids: ["user1", "user2"],
 				entities: {
 					user1: { id: "user1", name: "Alice", createdAt: 1000 },
@@ -473,7 +473,7 @@ describe("createEntityAdapter", () => {
 				initialState: users,
 			});
 
-			const { result } = renderHook(() => userAdapter.getCurrentState(), {
+			const { result } = renderHook(() => userAdapter.useCurrentState(), {
 				wrapper: RecoilRoot,
 			});
 
@@ -499,7 +499,7 @@ describe("createEntityAdapter", () => {
 				sortComparer: (a, b) => b.createdAt - a.createdAt,
 			});
 
-			const { result } = renderHook(() => userAdapter.getCurrentState(), {
+			const { result } = renderHook(() => userAdapter.useCurrentState(), {
 				wrapper: RecoilRoot,
 			});
 
@@ -523,7 +523,7 @@ describe("createEntityAdapter", () => {
 				initialState: users,
 			});
 
-			const { result } = renderHook(() => userAdapter.getCurrentState(), {
+			const { result } = renderHook(() => userAdapter.useCurrentState(), {
 				wrapper: RecoilRoot,
 			});
 
