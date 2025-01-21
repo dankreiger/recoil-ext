@@ -2,10 +2,7 @@
 	"name": "recoil-ext",
 	"version": "0.1.1",
 	"description": "Strongly typed read-only object methods",
-	"keywords": [
-		"array",
-		"typescript"
-	],
+	"keywords": ["recoil", "react", "state", "entities", "effects", "typescript"],
 	"homepage": "https://github.com/dankreiger/recoil-ext",
 	"bugs": {
 		"url": "https://github.com/dankreiger/recoil-ext/issues"
@@ -14,7 +11,7 @@
 		"type": "git",
 		"url": "git+https://github.com/dankreiger/recoil-ext.git"
 	},
-	"license": "ISC",
+	"license": "MIT",
 	"author": "Dan Kreiger <dankreiger@gmail.com>",
 	"sideEffects": false,
 	"type": "module",
@@ -37,10 +34,7 @@
 	"module": "dist/index.esm.js",
 	"browser": "dist/index.global.js",
 	"types": "./dist/index.d.ts",
-	"files": [
-		"dist/**",
-		"!**/*.tsbuildinfo"
-	],
+	"files": ["dist/**", "!**/*.tsbuildinfo"],
 	"scripts": {
 		"build": "tsup",
 		"format": "biome format . --write",
@@ -77,12 +71,10 @@
 	"peerDependencies": {
 		"recoil": "0.7.7"
 	},
+	"packageManager": "bun@1.1.45",
 	"publishConfig": {
 		"access": "public"
 	},
-	"trustedDependencies": [
-		"@biomejs/biome",
-		"esbuild"
-	],
+	"trustedDependencies": ["@biomejs/biome", "esbuild"],
 	"umd": "dist/index.global.js"
 }
