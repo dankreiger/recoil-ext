@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.12](https://github.com/dankreiger/recoil-ext/compare/v0.1.11...v0.1.12) (2025-01-21)
+
+
+### Bug Fixes
+
+* simplify adapter input ([7e66e29](https://github.com/dankreiger/recoil-ext/commit/7e66e294fbfdaadcb2581273d2eb51d3de11a49f))
+* update README ([6b1b38c](https://github.com/dankreiger/recoil-ext/commit/6b1b38cc7434f7c53b81e540d7cab767b09cac23))
+
 ## [0.1.11](https://github.com/dankreiger/recoil-ext/compare/v0.1.10...v0.1.11) (2025-01-21)
 
 
