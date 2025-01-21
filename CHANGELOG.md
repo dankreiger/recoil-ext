@@ -1,5 +1,7 @@
 # Changelog
 
+## [0.1.1](https://github.com/dankreiger/recoil-ext/compare/v0.1.0...v0.1.1) (2025-01-21)
+
 # 0.1.0 (2025-01-21)
 
 ### Bug Fixes
