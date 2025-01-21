@@ -2,14 +2,7 @@
 	"name": "recoil-ext",
 	"version": "0.1.9",
 	"description": "Strongly typed read-only object methods",
-	"keywords": [
-		"recoil",
-		"react",
-		"state",
-		"entities",
-		"effects",
-		"typescript"
-	],
+	"keywords": ["recoil", "react", "state", "entities", "effects", "typescript"],
 	"homepage": "https://github.com/dankreiger/recoil-ext",
 	"bugs": {
 		"url": "https://github.com/dankreiger/recoil-ext/issues"
@@ -41,11 +34,7 @@
 	"module": "./dist/index.mjs",
 	"browser": "dist/index.global.js",
 	"types": "./dist/index.d.ts",
-	"files": [
-		"dist/**",
-		"dist",
-		"!**/*.tsbuildinfo"
-	],
+	"files": ["dist/**", "dist", "!**/*.tsbuildinfo"],
 	"scripts": {
 		"build": "tsup",
 		"format": "biome format . --write",
@@ -86,9 +75,6 @@
 	"publishConfig": {
 		"access": "public"
 	},
-	"trustedDependencies": [
-		"@biomejs/biome",
-		"esbuild"
-	],
+	"trustedDependencies": ["@biomejs/biome", "esbuild"],
 	"umd": "dist/index.global.js"
 }
