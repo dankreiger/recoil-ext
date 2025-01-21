@@ -34,7 +34,10 @@ import type { EntityState } from "./entity-state.types";
  * - Consider using batch updates (addMany, updateMany) for multiple operations
  * - Leverage the readonly types to prevent accidental mutations
  */
-export interface EntityAdapter<T, Id extends string | number> {
+export interface EntityAdapter<
+	T,
+	Id extends string | number = string | number,
+> {
 	/**
 	 * The core Recoil atom that stores the entity state.
 	 * This atom contains both the entities and their IDs in a normalized format.

@@ -140,7 +140,6 @@ describe("createEntityAdapter", () => {
 
 			// Update book-1's title
 			act(() => {
-				// @ts-expect-error - hi
 				result.current.actions.updateOne("book-6", {
 					slug: "book-6",
 					title: "Recoil Book",
@@ -173,7 +172,6 @@ describe("createEntityAdapter", () => {
 				},
 			]);
 			act(() => {
-				// @ts-expect-error - hi
 				result.current.actions.removeOne("book-2");
 			});
 			expect(result.current.allBooks).toHaveLength(3);

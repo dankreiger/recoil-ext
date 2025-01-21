@@ -11,7 +11,7 @@ import { createEntityHooks, normalize } from "./internal";
 export function createEntityAdapter<
 	T extends { [key: string]: unknown },
 	K extends keyof T,
-	Id extends string | number = T[K] extends string | number ? T[K] : never,
+	Id extends string | number = string | number,
 >(options: {
 	key: string;
 	idKey: K;
