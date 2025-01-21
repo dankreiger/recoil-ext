@@ -3,6 +3,7 @@ import type { EntityState } from "./entity-state.types";
 
 export interface EntityAdapter<T, Id extends string | number> {
 	readonly entityAtom: RecoilState<EntityState<T, Id>>;
+	readonly getInitialState: () => EntityState<T, Id>;
 	readonly useAllEntities: () => ReadonlyArray<T>;
 	readonly createUseOneEntity: (id: Id) => T | undefined;
 	readonly createUseEntityActions: () => {

@@ -3,11 +3,10 @@ import { describe, expect, it } from "bun:test";
 import { act, renderHook } from "@testing-library/react";
 import { RecoilRoot } from "recoil";
 import { createEntityAdapter } from "./create-entity-adapter";
-// If using React 18, see also '@testing-library/react' to use its renderHook
 
 // Define a test entity type
 interface User {
-	id: string; // We'll match the "idKey"
+	id: string;
 	name: string;
 	createdAt: number;
 }
@@ -301,6 +300,128 @@ describe("createEntityAdapter", () => {
 			});
 
 			expect(result.current.allUsers[0].name).toBe("Alice");
+		});
+	});
+
+	describe("initial state", () => {
+		it("should normalize an array of entities", () => {
+			const users = [
+				{ id: "user1", name: "Alice", createdAt: 1000 },
+				{ id: "user2", name: "Bob", createdAt: 2000 },
+			] as const;
+
+			const userAdapter = createEntityAdapter<User, "id">({
+				key: "NormalizeTestAtom",
+				idKey: "id",
+				initialState: users,
+			});
+
+			const { result } = renderHook(() => userAdapter.useAllEntities(), {
+				wrapper: RecoilRoot,
+			});
+
+			expect(result.current).toEqual(users);
+		});
+
+		it("should handle empty arrays", () => {
+			const userAdapter = createEntityAdapter<User, "id">({
+				key: "EmptyNormalizeTestAtom",
+				idKey: "id",
+				initialState: [],
+			});
+
+			expect(userAdapter.getInitialState()).toEqual({
+				ids: [],
+				entities: {},
+			});
+
+			const { result } = renderHook(() => userAdapter.useAllEntities(), {
+				wrapper: RecoilRoot,
+			});
+
+			expect(result.current).toEqual([]);
+		});
+
+		it("should sort entities if sortComparer is provided", () => {
+			const users = [
+				{ id: "user1", name: "Alice", createdAt: 1000 },
+				{ id: "user2", name: "Bob", createdAt: 2000 },
+			] as const;
+			const userAdapter = createEntityAdapter<User, "id">({
+				key: "SortedNormalizeTestAtom",
+				idKey: "id",
+				initialState: users,
+				sortComparer: (a, b) => b.createdAt - a.createdAt, // reverse (highest first)
+			});
+
+			expect(userAdapter.getInitialState()).toEqual({
+				ids: ["user2", "user1"],
+				entities: {
+					user2: { id: "user2", name: "Bob", createdAt: 2000 },
+					user1: { id: "user1", name: "Alice", createdAt: 1000 },
+				},
+			});
+
+			const { result } = renderHook(() => userAdapter.useAllEntities(), {
+				wrapper: RecoilRoot,
+			});
+
+			// higher createdAt first
+			expect(result.current).toEqual([
+				{ id: "user2", name: "Bob", createdAt: 2000 },
+				{ id: "user1", name: "Alice", createdAt: 1000 },
+			]);
+
+			const userAdapter1 = createEntityAdapter<User, "id">({
+				key: "SortedNormalizeTestAtom1",
+				idKey: "id",
+				initialState: users,
+				sortComparer: (a, b) => a.createdAt - b.createdAt, // reverse (lowest first)
+			});
+
+			// lower createdAt first
+			expect(userAdapter1.getInitialState()).toEqual({
+				ids: ["user1", "user2"],
+				entities: {
+					user1: { id: "user1", name: "Alice", createdAt: 1000 },
+					user2: { id: "user2", name: "Bob", createdAt: 2000 },
+				},
+			});
+		});
+
+		it("should use custom selectId if provided", () => {
+			const users = [{ id: "user1", name: "Alice", createdAt: 1000 }] as const;
+			const userAdapter = createEntityAdapter<User, "id">({
+				key: "CustomIdNormalizeTestAtom",
+				idKey: "id",
+				selectId: (user) => `custom_${user.id}`,
+				initialState: users,
+			});
+
+			const { result } = renderHook(() => userAdapter.useAllEntities(), {
+				wrapper: RecoilRoot,
+			});
+
+			expect(result.current).toEqual(users);
+		});
+
+		it("should normalize with different idKey", () => {
+			const users = [
+				{ id: "user1", name: "Alice", createdAt: 1000 },
+				{ id: "user2", name: "Bob", createdAt: 2000 },
+			] as const;
+
+			const userAdapter = createEntityAdapter<User, "name">({
+				key: "NormalizeTestAtom1",
+				idKey: "name",
+				initialState: users,
+			});
+
+			const { result } = renderHook(() => userAdapter.useAllEntities(), {
+				wrapper: RecoilRoot,
+			});
+
+			expect(result.current).toEqual(users);
 		});
 	});
 });

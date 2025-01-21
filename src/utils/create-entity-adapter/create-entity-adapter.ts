@@ -1,6 +1,6 @@
 import { atom } from "recoil";
 import type { EntityAdapter, EntityState } from "./internal";
-import { createEntityHooks } from "./internal";
+import { createEntityHooks, normalize } from "./internal";
 
 /**
  * Creates an "Entity Adapter" for managing normalized state in Recoil.
@@ -15,6 +15,7 @@ export function createEntityAdapter<
 >(options: {
 	key: string;
 	idKey: K;
+	initialState?: ReadonlyArray<T> | T;
 	selectId?: (entity: T) => Id;
 	sortComparer?: (a: T, b: T) => number;
 }): EntityAdapter<T, Id> {
@@ -23,25 +24,25 @@ export function createEntityAdapter<
 		idKey,
 		selectId = (entity: T) => entity[idKey] as Id,
 		sortComparer,
+		initialState: inpState,
 	} = options;
 
-	/**
-	 * The shape of our Recoil atom:
-	 *  - `ids`: array of entity IDs
-	 *  - `entities`: map of ID -> entity
-	 */
+	const initialState = normalize(
+		Array.isArray(inpState) ? inpState : [inpState].filter(Boolean),
+		selectId,
+		sortComparer,
+	);
+
 	const entityAtom = atom<EntityState<T, Id>>({
 		key,
-		default: {
-			ids: [] as ReadonlyArray<Id>,
-			entities: {} as Readonly<Record<Id, T>>,
-		},
-	});
+		default: initialState,
+	} as const);
 
 	const { useAllEntities, createUseOneEntity, createUseEntityActions } =
 		createEntityHooks(key, entityAtom, selectId, sortComparer);
 
 	return {
+		getInitialState: () => initialState,
 		entityAtom,
 		useAllEntities,
 		createUseOneEntity,

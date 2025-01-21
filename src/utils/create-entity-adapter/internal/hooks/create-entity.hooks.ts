@@ -5,8 +5,8 @@ import { createUseEntityActions } from "./create-use-entity-actions";
 import { createUseOneEntity } from "./create-use-one-entity/create-use-one-entity.hooks";
 
 export function createEntityHooks<
-	T extends { [K in keyof T]: T[K] },
-	Id extends string | number,
+	const T extends { [K in keyof T]: T[K] },
+	const Id extends string | number,
 >(
 	key: string,
 	entityAtom: RecoilState<EntityState<T, Id>>,
