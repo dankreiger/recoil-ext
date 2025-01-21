@@ -7,8 +7,5 @@ export default defineConfig({
 	minify: true,
 	sourcemap: true,
 	dts: true,
-	shims: true,
-	splitting: true,
-	clean: true,
 	external: ["react", "react-dom", "recoil"],
 });
