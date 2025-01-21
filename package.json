@@ -1,8 +1,11 @@
 {
 	"name": "recoil-ext",
-	"version": "0.0.0",
+	"version": "0.1.0",
 	"description": "Strongly typed read-only object methods",
-	"keywords": ["array", "typescript"],
+	"keywords": [
+		"array",
+		"typescript"
+	],
 	"homepage": "https://github.com/dankreiger/strong-array",
 	"bugs": {
 		"url": "https://github.com/dankreiger/strong-array/issues"
@@ -34,7 +37,10 @@
 	"module": "dist/index.esm.js",
 	"browser": "dist/index.global.js",
 	"types": "./dist/index.d.ts",
-	"files": ["dist/**", "!**/*.tsbuildinfo"],
+	"files": [
+		"dist/**",
+		"!**/*.tsbuildinfo"
+	],
 	"scripts": {
 		"build": "tsup",
 		"format": "biome format . --write",
@@ -74,6 +80,9 @@
 	"publishConfig": {
 		"access": "public"
 	},
-	"trustedDependencies": ["@biomejs/biome", "esbuild"],
+	"trustedDependencies": [
+		"@biomejs/biome",
+		"esbuild"
+	],
 	"umd": "dist/index.global.js"
 }
