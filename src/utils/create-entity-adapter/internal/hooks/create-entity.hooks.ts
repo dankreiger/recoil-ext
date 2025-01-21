@@ -14,12 +14,9 @@ export function createEntityHooks<
 	sortComparer?: (a: T, b: T) => number,
 ) {
 	return {
-		useAllEntities: createUseAllEntities(entityAtom),
-		createUseOneEntity: createUseOneEntity(key, entityAtom),
-		createUseEntityActions: createUseEntityActions(
-			entityAtom,
-			selectId,
-			sortComparer,
-		),
+		useAllEntities: () => createUseAllEntities(entityAtom),
+		createUseOneEntity: () => createUseOneEntity(key, entityAtom),
+		createUseEntityActions: () =>
+			createUseEntityActions(entityAtom, selectId, sortComparer),
 	};
 }
