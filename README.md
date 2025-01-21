@@ -216,7 +216,7 @@ function App() {
 
 ```typescript
 function createEntityAdapter<T, K extends keyof T>(options: {
-  key: string;            // Recoil atom key
+  key: string;            // Recoil atom key (for state)
   idKey: K;              // Entity ID field
   initialState?: T[];    // Optional initial entities
 }): {
