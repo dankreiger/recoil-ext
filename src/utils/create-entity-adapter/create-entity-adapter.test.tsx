@@ -23,12 +23,12 @@ describe("createEntityAdapter", () => {
 			});
 
 			// Render a hook that uses:
-			// - createUseAllEntities: read all user entities
-			// - createUseEntityActions: get a set of actions (addOne, removeOne, etc.)
+			// - useAllEntities: read all user entities
+			// - useEntityActions: get a set of actions (addOne, removeOne, etc.)
 			const { result } = renderHook(
 				() => {
-					const allUsers = userAdapter.createUseAllEntities();
-					const actions = userAdapter.createUseEntityActions();
+					const allUsers = userAdapter.useAllEntities();
+					const actions = userAdapter.useEntityActions();
 					return { allUsers, actions };
 				},
 				{ wrapper: RecoilRoot },
@@ -98,12 +98,12 @@ describe("createEntityAdapter", () => {
 			});
 
 			// Render a hook that uses:
-			// - createUseAllEntities: read all book entities
-			// - createUseEntityActions: get actions (addOne, removeOne, etc.)
+			// - useAllEntities: read all book entities
+			// - useEntityActions: get actions (addOne, removeOne, etc.)
 			const { result } = renderHook(
 				() => {
-					const allBooks = bookAdapter.createUseAllEntities();
-					const actions = bookAdapter.createUseEntityActions();
+					const allBooks = bookAdapter.useAllEntities();
+					const actions = bookAdapter.useEntityActions();
 					return { allBooks, actions };
 				},
 				{ wrapper: RecoilRoot },
@@ -120,7 +120,6 @@ describe("createEntityAdapter", () => {
 					createdAt: 3000,
 				});
 			});
-			console.log(result.current.allBooks);
 			expect(result.current.allBooks).toHaveLength(3);
 			expect(result.current.allBooks[0].title).toBe("Recoil is a bit old");
 
@@ -192,8 +191,8 @@ describe("createEntityAdapter", () => {
 
 			const { result } = renderHook(
 				() => {
-					const allUsers = userAdapter.createUseAllEntities();
-					const actions = userAdapter.createUseEntityActions();
+					const allUsers = userAdapter.useAllEntities();
+					const actions = userAdapter.useEntityActions();
 					return { allUsers, actions };
 				},
 				{ wrapper: RecoilRoot },
@@ -219,8 +218,8 @@ describe("createEntityAdapter", () => {
 
 			const { result } = renderHook(
 				() => ({
-					allUsers: userAdapter.createUseAllEntities(),
-					actions: userAdapter.createUseEntityActions(),
+					allUsers: userAdapter.useAllEntities(),
+					actions: userAdapter.useEntityActions(),
 				}),
 				{ wrapper: RecoilRoot },
 			);
@@ -256,8 +255,8 @@ describe("createEntityAdapter", () => {
 
 			const { result } = renderHook(
 				() => ({
-					allUsers: userAdapter.createUseAllEntities(),
-					actions: userAdapter.createUseEntityActions(),
+					allUsers: userAdapter.useAllEntities(),
+					actions: userAdapter.useEntityActions(),
 				}),
 				{ wrapper: RecoilRoot },
 			);
@@ -281,8 +280,8 @@ describe("createEntityAdapter", () => {
 
 			const { result } = renderHook(
 				() => ({
-					allUsers: userAdapter.createUseAllEntities(),
-					actions: userAdapter.createUseEntityActions(),
+					allUsers: userAdapter.useAllEntities(),
+					actions: userAdapter.useEntityActions(),
 				}),
 				{ wrapper: RecoilRoot },
 			);
@@ -312,8 +311,8 @@ describe("createEntityAdapter", () => {
 
 			const { result } = renderHook(
 				() => ({
-					allUsers: userAdapter.createUseAllEntities(),
-					actions: userAdapter.createUseEntityActions(),
+					allUsers: userAdapter.useAllEntities(),
+					actions: userAdapter.useEntityActions(),
 				}),
 				{ wrapper: RecoilRoot },
 			);
@@ -348,7 +347,7 @@ describe("createEntityAdapter", () => {
 				initialState: users,
 			});
 
-			const { result } = renderHook(() => userAdapter.createUseAllEntities(), {
+			const { result } = renderHook(() => userAdapter.useAllEntities(), {
 				wrapper: RecoilRoot,
 			});
 
@@ -367,7 +366,7 @@ describe("createEntityAdapter", () => {
 				entities: {},
 			});
 
-			const { result } = renderHook(() => userAdapter.createUseAllEntities(), {
+			const { result } = renderHook(() => userAdapter.useAllEntities(), {
 				wrapper: RecoilRoot,
 			});
 
@@ -394,7 +393,7 @@ describe("createEntityAdapter", () => {
 				},
 			});
 
-			const { result } = renderHook(() => userAdapter.createUseAllEntities(), {
+			const { result } = renderHook(() => userAdapter.useAllEntities(), {
 				wrapper: RecoilRoot,
 			});
 
@@ -430,7 +429,7 @@ describe("createEntityAdapter", () => {
 				initialState: users,
 			});
 
-			const { result } = renderHook(() => userAdapter.createUseAllEntities(), {
+			const { result } = renderHook(() => userAdapter.useAllEntities(), {
 				wrapper: RecoilRoot,
 			});
 
@@ -449,7 +448,7 @@ describe("createEntityAdapter", () => {
 				initialState: users,
 			});
 
-			const { result } = renderHook(() => userAdapter.createUseAllEntities(), {
+			const { result } = renderHook(() => userAdapter.useAllEntities(), {
 				wrapper: RecoilRoot,
 			});
 

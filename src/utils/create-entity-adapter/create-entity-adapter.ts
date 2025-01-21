@@ -44,8 +44,8 @@ export function createEntityAdapter<
 	return {
 		getInitialState: () => initialState,
 		entityAtom,
-		createUseAllEntities: () => createUseAllEntities(),
-		createUseOneEntity: (id: Id) => createUseOneEntity(id),
-		createUseEntityActions: () => createUseEntityActions(),
+		useAllEntities: () => createUseAllEntities(),
+		useOneEntity: (id: Id) => createUseOneEntity(id),
+		useEntityActions: () => createUseEntityActions(),
 	};
 }

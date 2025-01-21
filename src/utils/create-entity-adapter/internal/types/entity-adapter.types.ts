@@ -87,7 +87,7 @@ export interface EntityAdapter<T, Id extends string | number> {
 	 * }
 	 * ```
 	 */
-	readonly createUseAllEntities: () => ReadonlyArray<T>;
+	readonly useAllEntities: () => ReadonlyArray<T>;
 
 	/**
 	 * Creates a hook that returns a single entity by its ID.
@@ -108,7 +108,7 @@ export interface EntityAdapter<T, Id extends string | number> {
 	 * }
 	 * ```
 	 */
-	readonly createUseOneEntity: (id: Id) => T | undefined;
+	readonly useOneEntity: (id: Id) => T | undefined;
 
 	/**
 	 * Creates an object containing all entity CRUD operations.
@@ -131,7 +131,7 @@ export interface EntityAdapter<T, Id extends string | number> {
 	 * }
 	 * ```
 	 */
-	readonly createUseEntityActions: () => {
+	readonly useEntityActions: () => {
 		/**
 		 * Adds a single entity to the state.
 		 * If an entity with the same ID exists, it will be replaced.
