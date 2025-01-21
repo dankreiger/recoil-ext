@@ -14,7 +14,7 @@ describe("normalize", () => {
 	];
 
 	it("should normalize an array of entities into an EntityState", () => {
-		const result = normalize(testEntities, (entity) => entity.id);
+		const result = normalize(testEntities, "id");
 
 		expect(result).toEqual({
 			ids: [1, 2, 3],
@@ -37,7 +37,7 @@ describe("normalize", () => {
 			{ id: "b", value: 2 },
 		];
 
-		const result = normalize(stringIdEntities, (entity) => entity.id);
+		const result = normalize(stringIdEntities, "id");
 
 		expect(result).toEqual({
 			ids: ["a", "b"],
@@ -49,7 +49,7 @@ describe("normalize", () => {
 	});
 
 	it("should handle empty array input", () => {
-		const result = normalize<TestEntity>([], (entity) => entity.id);
+		const result = normalize<TestEntity>([], "id");
 
 		expect(result).toEqual({
 			ids: [],
@@ -64,10 +64,8 @@ describe("normalize", () => {
 			{ id: 2, name: "B" },
 		];
 
-		const result = normalize(
-			unsortedEntities,
-			(entity) => entity.id,
-			(a, b) => a.name.localeCompare(b.name),
+		const result = normalize(unsortedEntities, "id", (a, b) =>
+			a.name.localeCompare(b.name),
 		);
 
 		expect(result.ids).toEqual([1, 2, 3]);
@@ -88,7 +86,7 @@ describe("normalize", () => {
 			{ userId: 2, name: "User 2" },
 		];
 
-		const result = normalize(complexEntities, (entity) => entity.userId);
+		const result = normalize(complexEntities, "userId");
 
 		expect(result).toEqual({
 			ids: [1, 2],

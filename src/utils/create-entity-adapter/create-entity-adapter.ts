@@ -1,5 +1,5 @@
-import { atom } from "recoil";
-import type { EntityAdapter, EntityId } from "./internal";
+import { atom, useRecoilValue } from "recoil";
+import type { EntityAdapter } from "./internal";
 import {
 	createUseAllEntities,
 	createUseEntityActions,
@@ -19,38 +19,25 @@ export function createEntityAdapter<
 	key: string;
 	idKey: K;
 	initialState?: ReadonlyArray<T> | T;
-	selectId?: (entity: T) => EntityId;
 	sortComparer?: (a: T, b: T) => number;
 }): EntityAdapter<T> {
-	const {
-		key,
-		idKey,
-		selectId = (entity: T) => entity[idKey] as EntityId,
-		sortComparer,
-		initialState: inpState,
-	} = options;
+	const { key, idKey, sortComparer, initialState: inputInitialState } = options;
 
+	const initialStateArray = [inputInitialState]
+		.flat()
+		.filter(Boolean) as ReadonlyArray<T>;
+
+	const initialEntityState = normalize(initialStateArray, idKey, sortComparer);
 	const inputAtom = atom({
 		key: `${key}_EntityAdapter`,
-		default: normalize(
-			// @ts-expect-error - too tired for this
-			Array.isArray(inpState) ? inpState : [inpState].filter(Boolean),
-			selectId,
-			sortComparer,
-		),
+		default: initialEntityState,
 	});
 
-	const initialState = normalize(
-		// @ts-expect-error - too tired for this
-		Array.isArray(inpState) ? inpState : [inpState].filter(Boolean),
-		selectId,
-		sortComparer,
-	);
-
 	return {
-		getInitialState: () => initialState,
+		getInitialState: () => initialEntityState,
+		getCurrentState: () => useRecoilValue(inputAtom),
 		useAllEntities: () => createUseAllEntities(inputAtom),
 		useOneEntity: createUseOneEntity(key, inputAtom),
-		useEntityActions: createUseEntityActions(inputAtom, selectId, sortComparer),
+		useEntityActions: createUseEntityActions(inputAtom, idKey, sortComparer),
 	} as const;
 }

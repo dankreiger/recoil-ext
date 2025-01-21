@@ -430,8 +430,6 @@ describe("createEntityAdapter", () => {
 			const userAdapter = createEntityAdapter<User, "id">({
 				key: "CustomIdNormalizeTestAtom",
 				idKey: "id",
-
-				selectId: (user) => `custom_${user.id}`,
 				initialState: users,
 			});
 
@@ -459,6 +457,83 @@ describe("createEntityAdapter", () => {
 			});
 
 			expect(result.current).toEqual(users);
+		});
+	});
+
+	describe("current state", () => {
+		it("should return the current state", () => {
+			const users = [
+				{ id: "user1", name: "Alice", createdAt: 1000 },
+				{ id: "user2", name: "Bob", createdAt: 2000 },
+			] as const;
+
+			const userAdapter = createEntityAdapter<User, "id">({
+				key: "CurrentStateTestAtom",
+				idKey: "id",
+				initialState: users,
+			});
+
+			const { result } = renderHook(() => userAdapter.getCurrentState(), {
+				wrapper: RecoilRoot,
+			});
+
+			expect(result.current).toEqual({
+				ids: ["user1", "user2"],
+				entities: {
+					user1: { id: "user1", name: "Alice", createdAt: 1000 },
+					user2: { id: "user2", name: "Bob", createdAt: 2000 },
+				},
+			});
+		});
+
+		it("should return the current state with a sorting specified", () => {
+			const users = [
+				{ id: "user1", name: "Alice", createdAt: 1000 },
+				{ id: "user2", name: "Bob", createdAt: 2000 },
+			] as const;
+
+			const userAdapter = createEntityAdapter<User, "id">({
+				key: "CurrentStateTestAtom",
+				idKey: "id",
+				initialState: users,
+				sortComparer: (a, b) => b.createdAt - a.createdAt,
+			});
+
+			const { result } = renderHook(() => userAdapter.getCurrentState(), {
+				wrapper: RecoilRoot,
+			});
+
+			expect(result.current).toEqual({
+				ids: ["user2", "user1"],
+				entities: {
+					user2: { id: "user2", name: "Bob", createdAt: 2000 },
+					user1: { id: "user1", name: "Alice", createdAt: 1000 },
+				},
+			});
+		});
+
+		it("should return the current state with a custom selectId", () => {
+			const users = [
+				{ id: "user1", name: "Alice", createdAt: 1000 },
+				{ id: "user2", name: "Bob", createdAt: 2000 },
+			] as const;
+			const userAdapter = createEntityAdapter<User, "name">({
+				key: "CurrentStateTestAtom1",
+				idKey: "name",
+				initialState: users,
+			});
+
+			const { result } = renderHook(() => userAdapter.getCurrentState(), {
+				wrapper: RecoilRoot,
+			});
+
+			expect(result.current).toEqual({
+				ids: ["Alice", "Bob"],
+				entities: {
+					Alice: { id: "user1", name: "Alice", createdAt: 1000 },
+					Bob: { id: "user2", name: "Bob", createdAt: 2000 },
+				},
+			});
 		});
 	});
 });

@@ -35,6 +35,13 @@ import type { EntityState } from "./entity-state.types";
  */
 export interface EntityAdapter<T> {
 	/**
+	 * Returns the current state of the entity adapter.
+	 *
+	 * @returns {EntityState<T>} The current state of the entity adapter
+	 */
+	readonly getCurrentState: () => EntityState<T>;
+
+	/**
 	 * Returns a fresh, empty entity state object.
 	 * Use this to initialize your entity state when needed.
 	 *
@@ -74,27 +81,6 @@ export interface EntityAdapter<T> {
 	readonly useAllEntities: () => ReadonlyArray<T>;
 
 	/**
-	 * Creates a hook that returns a single entity by its ID.
-	 * Returns undefined if the entity doesn't exist.
-	 *
-	 * @performance
-	 * - O(1) lookup time
-	 * - Component only re-renders when the specific entity changes
-	 *
-	 * @example
-	 * ```typescript
-	 * function UserProfile({ userId }: { userId: string }) {
-	 *   const useUser = adapter.createUseOneEntity;
-	 *   const user = useUser(userId);
-	 *
-	 *   if (!user) return <div>User not found</div>;
-	 *   return <div>Name: {user.name}</div>;
-	 * }
-	 * ```
-	 */
-	readonly useOneEntity: (id: EntityId) => T | undefined;
-
-	/**
 	 * Creates an object containing all entity CRUD operations.
 	 * All methods are readonly to ensure immutability.
 	 *
@@ -117,21 +103,6 @@ export interface EntityAdapter<T> {
 	 */
 	readonly useEntityActions: () => {
 		/**
-		 * Adds a single entity to the state.
-		 * If an entity with the same ID exists, it will be replaced.
-		 *
-		 * @performance O(1) operation
-		 *
-		 * @example
-		 * ```typescript
-		 * actions.addOne({ id: '1', name: 'Alice', age: 30 });
-		 * ```
-		 *
-		 * @throws {TypeError} If entity is missing an id field
-		 */
-		readonly addOne: (entity: T) => void;
-
-		/**
 		 * Adds multiple entities to the state.
 		 * Existing entities with the same IDs will be replaced.
 		 *
@@ -151,36 +122,32 @@ export interface EntityAdapter<T> {
 		readonly addMany: (entities: ReadonlyArray<T>) => void;
 
 		/**
-		 * Replaces all existing entities with the provided array of entities.
-		 * This will remove any entities not included in the new array.
-		 *
-		 * @performance
-		 * - O(n) where n is the number of new entities
-		 * - Single atomic update
-		 * - Completely replaces internal storage
-		 *
-		 * @example
-		 * ```typescript
-		 * actions.setAll([
-		 *   { id: '1', name: 'Alice' },
-		 *   { id: '2', name: 'Bob' }
-		 * ]); // Removes all other entities
-		 * ```
-		 */
-		readonly setAll: (entities: ReadonlyArray<T>) => void;
-
-		/**
-		 * Removes a single entity from the state by its ID.
-		 * No-op if the entity doesn't exist.
+		 * Adds a single entity to the state.
+		 * If an entity with the same ID exists, it will be replaced.
 		 *
 		 * @performance O(1) operation
 		 *
 		 * @example
 		 * ```typescript
-		 * actions.removeOne('1'); // Removes user with id '1'
+		 * actions.addOne({ id: '1', name: 'Alice', age: 30 });
+		 * ```
+		 *
+		 * @throws {TypeError} If entity is missing an id field
+		 */
+		readonly addOne: (entity: T) => void;
+
+		/**
+		 * Removes all entities from the state.
+		 * Resets the state to its initial empty state.
+		 *
+		 * @performance O(1) operation - simply resets to empty state
+		 *
+		 * @example
+		 * ```typescript
+		 * actions.removeAll(); // Clears all entities
 		 * ```
 		 */
-		readonly removeOne: (id: EntityId) => void;
+		readonly removeAll: () => void;
 
 		/**
 		 * Removes multiple entities from the state by their IDs.
@@ -199,32 +166,36 @@ export interface EntityAdapter<T> {
 		readonly removeMany: (ids: ReadonlyArray<EntityId>) => void;
 
 		/**
-		 * Removes all entities from the state.
-		 * Resets the state to its initial empty state.
-		 *
-		 * @performance O(1) operation - simply resets to empty state
-		 *
-		 * @example
-		 * ```typescript
-		 * actions.removeAll(); // Clears all entities
-		 * ```
-		 */
-		readonly removeAll: () => void;
-
-		/**
-		 * Updates a single entity by applying partial changes.
+		 * Removes a single entity from the state by its ID.
 		 * No-op if the entity doesn't exist.
 		 *
-		 * @performance
-		 * - O(1) operation
-		 * - Preserves reference equality for unchanged fields
+		 * @performance O(1) operation
 		 *
 		 * @example
 		 * ```typescript
-		 * actions.updateOne('1', { name: 'Alice 2.0' }); // Only updates name
+		 * actions.removeOne('1'); // Removes user with id '1'
 		 * ```
 		 */
-		readonly updateOne: (id: EntityId, changes: Partial<T>) => void;
+		readonly removeOne: (id: EntityId) => void;
+
+		/**
+		 * Replaces all existing entities with the provided array of entities.
+		 * This will remove any entities not included in the new array.
+		 *
+		 * @performance
+		 * - O(n) where n is the number of new entities
+		 * - Single atomic update
+		 * - Completely replaces internal storage
+		 *
+		 * @example
+		 * ```typescript
+		 * actions.setAll([
+		 *   { id: '1', name: 'Alice' },
+		 *   { id: '2', name: 'Bob' }
+		 * ]); // Removes all other entities
+		 * ```
+		 */
+		readonly setAll: (entities: ReadonlyArray<T>) => void;
 
 		/**
 		 * Updates multiple entities by applying partial changes.
@@ -250,7 +221,43 @@ export interface EntityAdapter<T> {
 				readonly changes: Partial<T>;
 			}>,
 		) => void;
+
+		/**
+		 * Updates a single entity by applying partial changes.
+		 * No-op if the entity doesn't exist.
+		 *
+		 * @performance
+		 * - O(1) operation
+		 * - Preserves reference equality for unchanged fields
+		 *
+		 * @example
+		 * ```typescript
+		 * actions.updateOne('1', { name: 'Alice 2.0' }); // Only updates name
+		 * ```
+		 */
+		readonly updateOne: (id: EntityId, changes: Partial<T>) => void;
 	};
+
+	/**
+	 * Creates a hook that returns a single entity by its ID.
+	 * Returns undefined if the entity doesn't exist.
+	 *
+	 * @performance
+	 * - O(1) lookup time
+	 * - Component only re-renders when the specific entity changes
+	 *
+	 * @example
+	 * ```typescript
+	 * function UserProfile({ userId }: { userId: string }) {
+	 *   const useUser = adapter.createUseOneEntity;
+	 *   const user = useUser(userId);
+	 *
+	 *   if (!user) return <div>User not found</div>;
+	 *   return <div>Name: {user.name}</div>;
+	 * }
+	 * ```
+	 */
+	readonly useOneEntity: (id: EntityId) => T | undefined;
 }
 
 export type EntityId = string | number;

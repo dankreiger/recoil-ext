@@ -2,14 +2,14 @@ import type { EntityId, EntityState } from "../../types";
 
 export const normalize = <T>(
 	entities: ReadonlyArray<T>,
-	selectId: (entity: T) => EntityId,
+	idKey: keyof T,
 	sortComparer?: (a: T, b: T) => number,
 ): EntityState<T> => {
 	const ids: EntityId[] = [];
 	const entitiesMap = {} as Record<EntityId, T>;
 
 	for (const entity of entities) {
-		const id = selectId(entity);
+		const id = entity[idKey] as EntityId;
 		ids.push(id);
 		entitiesMap[id] = entity;
 	}

@@ -13,9 +13,9 @@ import {
 	upsertOneUpdater,
 } from "../..";
 
-export const createUseEntityActions = <T extends { [K in keyof T]: T[K] }>(
+export const createUseEntityActions = <T extends object>(
 	entityAtom: RecoilState<EntityState<T>>,
-	selectId: (entity: T) => EntityId,
+	idKey: keyof T,
 	sortComparer?: (a: T, b: T) => number,
 ) => {
 	return () => {
@@ -24,22 +24,22 @@ export const createUseEntityActions = <T extends { [K in keyof T]: T[K] }>(
 		return {
 			addOne: (entity: T) => {
 				setEntities((prev: EntityState<T>) =>
-					addOneUpdater(prev, entity, selectId, sortComparer),
+					addOneUpdater(prev, entity, idKey, sortComparer),
 				);
 			},
 			addMany: (entities: ReadonlyArray<T>) => {
 				setEntities((prev: EntityState<T>) =>
-					addManyUpdater(prev, entities, selectId, sortComparer),
+					addManyUpdater(prev, entities, idKey, sortComparer),
 				);
 			},
 			upsertOne: (entity: T) => {
 				setEntities((prev: EntityState<T>) =>
-					upsertOneUpdater(prev, entity, selectId, sortComparer),
+					upsertOneUpdater(prev, entity, idKey, sortComparer),
 				);
 			},
 			setAll: (entities: ReadonlyArray<T>) => {
 				setEntities((prev: EntityState<T>) =>
-					setAllUpdater(prev, entities, selectId, sortComparer),
+					setAllUpdater(prev, entities, idKey, sortComparer),
 				);
 			},
 			updateOne: (id: EntityId, changes: Partial<T>) => {

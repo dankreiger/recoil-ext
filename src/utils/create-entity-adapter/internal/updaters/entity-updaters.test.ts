@@ -31,7 +31,7 @@ describe("Entity Updaters", () => {
 	describe("addOneUpdater", () => {
 		it("should add a new entity to the state", () => {
 			const newEntity: TestEntity = { id: 3, name: "Entity 3" };
-			const result = addOneUpdater(initialState, newEntity, selectId);
+			const result = addOneUpdater(initialState, newEntity, "id");
 
 			expect(result.ids).toEqual([1, 2, 3]);
 			expect(result.entities[3]).toEqual(newEntity);
@@ -39,7 +39,7 @@ describe("Entity Updaters", () => {
 
 		it("should not modify state if entity already exists", () => {
 			const existingEntity: TestEntity = { id: 1, name: "Modified Entity 1" };
-			const result = addOneUpdater(initialState, existingEntity, selectId);
+			const result = addOneUpdater(initialState, existingEntity, "id");
 
 			expect(result).toBe(initialState);
 		});
@@ -51,7 +51,7 @@ describe("Entity Updaters", () => {
 				{ id: 3, name: "Entity 3" },
 				{ id: 4, name: "Entity 4" },
 			];
-			const result = addManyUpdater(initialState, newEntities, selectId);
+			const result = addManyUpdater(initialState, newEntities, "id");
 
 			expect(result.ids).toEqual([1, 2, 3, 4]);
 			expect(result.entities[3]).toEqual(newEntities[0]);
@@ -59,7 +59,7 @@ describe("Entity Updaters", () => {
 		});
 
 		it("should return same state if no entities provided", () => {
-			const result = addManyUpdater(initialState, [], selectId);
+			const result = addManyUpdater(initialState, [], "id");
 			expect(result).toBe(initialState);
 		});
 	});
@@ -101,7 +101,7 @@ describe("Entity Updaters", () => {
 				{ id: 3, name: "Entity 3" },
 				{ id: 4, name: "Entity 4" },
 			];
-			const result = setAllUpdater(initialState, newEntities, selectId);
+			const result = setAllUpdater(initialState, newEntities, "id");
 
 			expect(result.ids).toEqual([3, 4]);
 			expect(result.entities[3]).toEqual(newEntities[0]);
@@ -115,12 +115,7 @@ describe("Entity Updaters", () => {
 				a.name.localeCompare(b.name);
 			const newEntity: TestEntity = { id: 3, name: "Aardvark" };
 
-			const result = addOneUpdater(
-				initialState,
-				newEntity,
-				selectId,
-				sortComparer,
-			);
+			const result = addOneUpdater(initialState, newEntity, "id", sortComparer);
 
 			expect(result.ids[0]).toBe(3); // Aardvark should be first
 		});

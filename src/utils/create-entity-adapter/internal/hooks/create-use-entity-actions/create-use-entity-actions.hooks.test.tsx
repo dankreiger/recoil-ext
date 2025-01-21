@@ -21,7 +21,6 @@ describe("createUseEntityActions", () => {
 		default: initialState,
 	});
 
-	const selectId = (entity: TestEntity) => entity.id;
 	const wrapper = ({ children }: { readonly children: React.ReactNode }) => (
 		<RecoilRoot>{children}</RecoilRoot>
 	);
@@ -36,10 +35,11 @@ describe("createUseEntityActions", () => {
 		jest.clearAllMocks();
 	});
 
+	const idKey = "id";
 	describe("basic operations", () => {
 		it("should provide all entity actions", () => {
 			const { result } = renderHook(
-				() => createUseEntityActions(testAtom, selectId)(),
+				() => createUseEntityActions(testAtom, idKey)(),
 				{ wrapper },
 			);
 
@@ -59,7 +59,7 @@ describe("createUseEntityActions", () => {
 		it("should add a single entity to empty state", () => {
 			const { result } = renderHook(
 				() => {
-					const actions = createUseEntityActions(testAtom, selectId)();
+					const actions = createUseEntityActions(testAtom, idKey)();
 					const { state } = useTestState();
 					return { actions, state };
 				},
@@ -79,7 +79,7 @@ describe("createUseEntityActions", () => {
 		it("should preserve existing entities when adding new one", () => {
 			const { result } = renderHook(
 				() => {
-					const actions = createUseEntityActions(testAtom, selectId)();
+					const actions = createUseEntityActions(testAtom, idKey)();
 					const { state } = useTestState();
 					return { actions, state };
 				},
@@ -104,7 +104,7 @@ describe("createUseEntityActions", () => {
 		it("should handle empty array", () => {
 			const { result } = renderHook(
 				() => {
-					const actions = createUseEntityActions(testAtom, selectId)();
+					const actions = createUseEntityActions(testAtom, idKey)();
 					const { state } = useTestState();
 					return { actions, state };
 				},
@@ -122,7 +122,7 @@ describe("createUseEntityActions", () => {
 		it("should add multiple entities and maintain order", () => {
 			const { result } = renderHook(
 				() => {
-					const actions = createUseEntityActions(testAtom, selectId)();
+					const actions = createUseEntityActions(testAtom, idKey)();
 					const { state } = useTestState();
 					return { actions, state };
 				},
@@ -154,7 +154,7 @@ describe("createUseEntityActions", () => {
 				() => {
 					const actions = createUseEntityActions(
 						testAtom,
-						selectId,
+						idKey,
 						sortComparer,
 					)();
 					const { state } = useTestState();
@@ -181,7 +181,7 @@ describe("createUseEntityActions", () => {
 		it("should partially update entity", () => {
 			const { result } = renderHook(
 				() => {
-					const actions = createUseEntityActions(testAtom, selectId)();
+					const actions = createUseEntityActions(testAtom, idKey)();
 					const { state } = useTestState();
 					return { actions, state };
 				},
@@ -205,7 +205,7 @@ describe("createUseEntityActions", () => {
 		it("should ignore update for non-existent entity", () => {
 			const { result } = renderHook(
 				() => {
-					const actions = createUseEntityActions(testAtom, selectId)();
+					const actions = createUseEntityActions(testAtom, idKey)();
 					const { state } = useTestState();
 					return { actions, state };
 				},
@@ -225,7 +225,7 @@ describe("createUseEntityActions", () => {
 		it("should remove multiple entities", () => {
 			const { result } = renderHook(
 				() => {
-					const actions = createUseEntityActions(testAtom, selectId)();
+					const actions = createUseEntityActions(testAtom, idKey)();
 					const { state } = useTestState();
 					return { actions, state };
 				},
@@ -253,7 +253,7 @@ describe("createUseEntityActions", () => {
 		it("should clear all entities with removeAll", () => {
 			const { result } = renderHook(
 				() => {
-					const actions = createUseEntityActions(testAtom, selectId)();
+					const actions = createUseEntityActions(testAtom, idKey)();
 					const { state } = useTestState();
 					return { actions, state };
 				},
@@ -279,7 +279,7 @@ describe("createUseEntityActions", () => {
 		it("should add new entity if it doesnt exist", () => {
 			const { result } = renderHook(
 				() => {
-					const actions = createUseEntityActions(testAtom, selectId)();
+					const actions = createUseEntityActions(testAtom, idKey)();
 					const { state } = useTestState();
 					return { actions, state };
 				},
@@ -298,7 +298,7 @@ describe("createUseEntityActions", () => {
 		it("should update existing entity", () => {
 			const { result } = renderHook(
 				() => {
-					const actions = createUseEntityActions(testAtom, selectId)();
+					const actions = createUseEntityActions(testAtom, idKey)();
 					const { state } = useTestState();
 					return { actions, state };
 				},

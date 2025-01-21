@@ -6,10 +6,10 @@ export function addOneUpdater<
 >(
 	state: EntityState<T>,
 	entity: T,
-	selectId: (entity: T) => Id,
+	idKey: keyof T,
 	sortComparer?: (a: T, b: T) => number,
 ): EntityState<T> {
-	const id = selectId(entity);
+	const id = entity[idKey];
 	if (id in state.entities) {
 		return state;
 	}
@@ -24,7 +24,7 @@ export function addManyUpdater<
 >(
 	state: EntityState<T>,
 	entities: ReadonlyArray<T>,
-	selectId: (entity: T) => Id,
+	idKey: keyof T,
 	sortComparer?: (a: T, b: T) => number,
 ): EntityState<T> {
 	if (!entities.length) return state;
@@ -33,7 +33,7 @@ export function addManyUpdater<
 	const idsSet = new Set(state.ids);
 
 	for (const e of entities) {
-		const eId = selectId(e);
+		const eId = e[idKey];
 		if (!(eId in newEntities)) {
 			changed = true;
 			newEntities[eId] = e;
@@ -56,10 +56,10 @@ export function upsertOneUpdater<
 >(
 	state: EntityState<T>,
 	entity: T,
-	selectId: (entity: T) => Id,
+	idKey: keyof T,
 	sortComparer?: (a: T, b: T) => number,
 ): EntityState<T> {
-	const id = selectId(entity);
+	const id = entity[idKey];
 	const exists = id in state.entities;
 	if (!exists) {
 		const newIds = [...state.ids, id];
@@ -80,13 +80,13 @@ export function setAllUpdater<
 >(
 	_: EntityState<T>,
 	entities: ReadonlyArray<T>,
-	selectId: (entity: T) => Id,
+	idKey: keyof T,
 	sortComparer?: (a: T, b: T) => number,
 ): EntityState<T> {
 	const newEntities = {} as Record<Id, T>;
 	const ids: Id[] = [];
 	for (const e of entities) {
-		const eId = selectId(e);
+		const eId = e[idKey];
 		newEntities[eId] = e;
 		ids.push(eId);
 	}
