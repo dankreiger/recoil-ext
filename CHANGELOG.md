@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.4](https://github.com/dankreiger/recoil-ext/compare/v0.1.3...v0.1.4) (2025-01-21)
+
+
+### Bug Fixes
+
+* make hooks lazy ([d86b162](https://github.com/dankreiger/recoil-ext/commit/d86b162bf756fcbca20b553cb5630a1fe5223065))
+* make hooks lazy ([f3dbbf7](https://github.com/dankreiger/recoil-ext/commit/f3dbbf78718257db4d1cf736d06458558e4dbd27))
+
 ## [0.1.3](https://github.com/dankreiger/recoil-ext/compare/v0.1.2...v0.1.3) (2025-01-21)
 
 
