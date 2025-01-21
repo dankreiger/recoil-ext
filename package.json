@@ -1,19 +1,79 @@
 {
-  "name": "recoil-ext",
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "build": "bun build ./src/index.ts --outdir ./dist",
-    "test": "bun test",
-    "format": "biome format . --write",
-    "lint": "biome check .",
-    "lint:fix": "biome check . --apply",
-    "prepare": "bun run build",
-    "release": "release-it"
-  },
-  "devDependencies": {},
-  "dependencies": {},
-  "publishConfig": {
-    "access": "public"
-  }
+	"name": "recoil-ext",
+	"version": "0.0.0",
+	"description": "Strongly typed read-only object methods",
+	"keywords": ["array", "typescript"],
+	"homepage": "https://github.com/dankreiger/strong-array",
+	"bugs": {
+		"url": "https://github.com/dankreiger/strong-array/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/dankreiger/strong-array.git"
+	},
+	"license": "ISC",
+	"author": "Dan Kreiger <dankreiger@gmail.com>",
+	"sideEffects": false,
+	"type": "module",
+	"exports": {
+		".": {
+			"import": {
+				"types": "./dist/index.d.ts",
+				"default": "./dist/index.esm.js"
+			},
+			"require": {
+				"types": "./dist/index.d.ts",
+				"default": "./dist/index.cjs"
+			}
+		},
+		"./package.json": "./package.json",
+		"./*": "./*"
+	},
+	"main": "dist/index.cjs",
+	"unpkg": "dist/index.global.js",
+	"module": "dist/index.esm.js",
+	"browser": "dist/index.global.js",
+	"types": "./dist/index.d.ts",
+	"files": ["dist/**", "!**/*.tsbuildinfo"],
+	"scripts": {
+		"build": "tsup",
+		"format": "biome format . --write",
+		"lint": "biome check .",
+		"lint:fix": "biome check . --write",
+		"prepare": "bun run build",
+		"release": "release-it"
+	},
+	"config": {
+		"commitizen": {
+			"path": "./node_modules/cz-conventional-changelog"
+		}
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@commitlint/cli": "19.6.1",
+		"@commitlint/config-conventional": "19.6.0",
+		"@happy-dom/global-registrator": "^16.7.1",
+		"@release-it/conventional-changelog": "10.0.0",
+		"@testing-library/dom": "^10.4.0",
+		"@testing-library/jest-dom": "6.6.3",
+		"@testing-library/react": "16.2.0",
+		"@types/bun": "1.1.17",
+		"@types/react": "18.3.0",
+		"@types/react-dom": "18.3.0",
+		"commitizen": "4.3.1",
+		"cz-conventional-changelog": "3.3.0",
+		"lefthook": "1.10.9",
+		"react": "18.3.1",
+		"react-dom": "18.3.1",
+		"tsup": "8.3.5",
+		"typescript": "^5.7.3"
+	},
+	"peerDependencies": {
+		"recoil": "0.7.7"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"trustedDependencies": ["@biomejs/biome", "esbuild"],
+	"umd": "dist/index.global.js"
 }

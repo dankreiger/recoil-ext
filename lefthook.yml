@@ -1,0 +1,22 @@
+# Validate commit messages
+pre-commit:
+  parallel: true
+  commands:
+    test:
+      run: bun test
+
+    typecheck:
+      glob: 'src/**/*.{js,ts,jsx,tsx}'
+      run: bunx tsc --noEmit
+
+    format_and_lint:
+      glob: 'src/**/*.{js,ts,jsx,tsx}'
+      run:  bunx biome check --write {staged_files}
+      stage_fixed: true
+
+commit-msg:
+  commands:
+    test:
+      run: bun test
+
+
