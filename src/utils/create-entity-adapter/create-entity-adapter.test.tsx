@@ -85,7 +85,6 @@ describe("createEntityAdapter", () => {
 		}
 		it("should work with 'slug' as the ID key", () => {
 			// Create an adapter that uses 'slug' instead of 'id'
-			// @ts-expect-error - hi
 			const bookAdapter = createEntityAdapter<Book, "slug">({
 				key: "BookTestAtom",
 				idKey: "slug",

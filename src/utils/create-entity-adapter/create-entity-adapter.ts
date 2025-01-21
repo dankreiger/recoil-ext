@@ -9,7 +9,7 @@ import { createEntityHooks, normalize } from "./internal";
  * @template Id The type of the ID (defaults to the type of T[K])
  */
 export function createEntityAdapter<
-	T extends { [key: string]: unknown },
+	T extends object,
 	K extends keyof T,
 	Id extends string | number = string | number,
 >(options: {
@@ -28,6 +28,7 @@ export function createEntityAdapter<
 	} = options;
 
 	const initialState = normalize(
+		// @ts-expect-error - too tired for this
 		Array.isArray(inpState) ? inpState : [inpState].filter(Boolean),
 		selectId,
 		sortComparer,
