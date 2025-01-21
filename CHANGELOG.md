@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.6](https://github.com/dankreiger/recoil-ext/compare/v0.1.5...v0.1.6) (2025-01-21)
+
+
+### Bug Fixes
+
+* improve naming ([c3ce149](https://github.com/dankreiger/recoil-ext/commit/c3ce14992be9adcb3cbd432edb03e52940b090db))
+* run formatter ([af41ef4](https://github.com/dankreiger/recoil-ext/commit/af41ef478745adac56698dffff21da1ef31dd1aa))
+* update README ([55a1918](https://github.com/dankreiger/recoil-ext/commit/55a19181086e81f8a1949eac16fbd63a7f86b3c1))
+
 ## [0.1.5](https://github.com/dankreiger/recoil-ext/compare/v0.1.4...v0.1.5) (2025-01-21)
 
 
