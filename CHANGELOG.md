@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.14](https://github.com/dankreiger/recoil-ext/compare/v0.1.13...v0.1.14) (2025-01-22)
+
+
+### Bug Fixes
+
+* persist payloer with preficate ([f3ddbb3](https://github.com/dankreiger/recoil-ext/commit/f3ddbb3dc4a5a0d3a788fdd15ba1e074d22817e3))
+
 ## [0.1.13](https://github.com/dankreiger/recoil-ext/compare/v0.1.12...v0.1.13) (2025-01-22)
 
 
