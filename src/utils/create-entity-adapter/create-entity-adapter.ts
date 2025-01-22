@@ -83,14 +83,16 @@ export function createEntityAdapter<T extends object>(options: {
 	readonly idKey: keyof T;
 	readonly initialState?: ReadonlyArray<T> | T;
 	readonly sortComparer?: (a: T, b: T) => number;
-	readonly withPersistence?: boolean;
+	readonly persistance?: {
+		readonly cleanupPredicate?: (value: T, key: IDBValidKey) => boolean;
+	};
 }): EntityAdapter<T> {
 	const {
 		key,
 		idKey,
 		sortComparer,
 		initialState: inputInitialState,
-		withPersistence,
+		persistance,
 	} = options;
 
 	// Ensure we handle both a single object or an array of objects
@@ -105,7 +107,7 @@ export function createEntityAdapter<T extends object>(options: {
 	const entityAtom = atom({
 		key: `${key}_EntityAdapter`,
 		default: initialEntityState,
-		effects: withPersistence
+		effects: persistance?.cleanupPredicate
 			? [idbEffect({ dbName: key, storeName: key, key })]
 			: [],
 	});
