@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.13](https://github.com/dankreiger/recoil-ext/compare/v0.1.12...v0.1.13) (2025-01-22)
+
+
+### Bug Fixes
+
+* add idb persist ([c35e68e](https://github.com/dankreiger/recoil-ext/commit/c35e68eef22bdcb069fb796957ca898203438195))
+* update docs ([20639e8](https://github.com/dankreiger/recoil-ext/commit/20639e8469e112d05befbc18060f51a4344a20ac))
+
 ## [0.1.12](https://github.com/dankreiger/recoil-ext/compare/v0.1.11...v0.1.12) (2025-01-21)
 
 
