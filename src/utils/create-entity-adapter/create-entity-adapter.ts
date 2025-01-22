@@ -1,4 +1,5 @@
 import { atom, useRecoilValue } from "recoil";
+import { idbEffect } from "../../effects";
 import type { EntityAdapter } from "./internal";
 import {
 	createUseAllEntities,
@@ -82,8 +83,15 @@ export function createEntityAdapter<T extends object>(options: {
 	readonly idKey: keyof T;
 	readonly initialState?: ReadonlyArray<T> | T;
 	readonly sortComparer?: (a: T, b: T) => number;
+	readonly withPersistence?: boolean;
 }): EntityAdapter<T> {
-	const { key, idKey, sortComparer, initialState: inputInitialState } = options;
+	const {
+		key,
+		idKey,
+		sortComparer,
+		initialState: inputInitialState,
+		withPersistence,
+	} = options;
 
 	// Ensure we handle both a single object or an array of objects
 	const initialStateArray = [inputInitialState]
@@ -97,6 +105,9 @@ export function createEntityAdapter<T extends object>(options: {
 	const entityAtom = atom({
 		key: `${key}_EntityAdapter`,
 		default: initialEntityState,
+		effects: withPersistence
+			? [idbEffect({ dbName: key, storeName: key, key })]
+			: [],
 	});
 
 	return {

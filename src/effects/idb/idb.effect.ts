@@ -1,13 +1,26 @@
 import type { AtomEffect } from "recoil";
-import type { IndexedDBEffectOptions } from "./internal";
+
+interface IndexedDBEffectOptions<T> {
+	readonly dbName: string;
+	readonly storeName: string;
+	readonly key: IDBValidKey;
+	/**
+	 * If provided, runs after opening the DB (once, at "get" trigger).
+	 * Any entries that match the predicate will be removed.
+	 */
+	readonly cleanupPredicate?: (value: T, key: IDBValidKey) => boolean;
+}
+
 /**
- * Creates an AtomEffect that syncs the atom to IndexedDB.
+ * Creates an AtomEffect that syncs the atom to IndexedDB, and can optionally
+ * remove existing records in the store if they match a given predicate.
  */
 export function idbEffect<T>({
 	dbName,
 	storeName,
 	key,
-}: IndexedDBEffectOptions): AtomEffect<T> {
+	cleanupPredicate,
+}: IndexedDBEffectOptions<T>): AtomEffect<T> {
 	return ({ setSelf, onSet, trigger }) => {
 		let db: IDBDatabase | null = null;
 
@@ -90,12 +103,58 @@ export function idbEffect<T>({
 		}
 
 		/**
+		 * Cleanup pass. If a `cleanupPredicate` is provided, iterate
+		 * through the entire store; for each record matching the predicate,
+		 * remove it.
+		 */
+		async function cleanupStore() {
+			if (!db) {
+				db = await openDB();
+			}
+			if (!db || !cleanupPredicate) return;
+			return new Promise<void>((resolve, reject) => {
+				if (!db) return reject(new Error("IndexedDB not initialized"));
+				const transaction = db.transaction([storeName], "readwrite");
+				const store = transaction.objectStore(storeName);
+				// Open a cursor to iterate all entries
+				const request = store.openCursor();
+				request.onsuccess = () => {
+					const cursor = request.result;
+					if (cursor) {
+						const value = cursor.value as T;
+						if (cleanupPredicate(value, cursor.key)) {
+							// Delete this record
+							const deleteReq = cursor.delete();
+							deleteReq.onsuccess = () => {
+								cursor.continue();
+							};
+							deleteReq.onerror = () => {
+								// If delete fails for any reason, we can either keep going or reject
+								console.error("Failed to delete IDB entry", deleteReq.error);
+								cursor.continue();
+							};
+						} else {
+							cursor.continue();
+						}
+					} else {
+						// No more entries
+						resolve();
+					}
+				};
+				request.onerror = () => {
+					reject(request.error);
+				};
+			});
+		}
+
+		/**
 		 * Only attempt to initialize if the effect was triggered by
 		 * "initial mount" (not a subsequent update).
 		 */
 		if (trigger === "get") {
-			// Asynchronously load initial value from IndexedDB:
-			readFromDB()
+			// Asynchronously run the cleanup (if provided), then load initial value
+			cleanupStore()
+				.then(() => readFromDB())
 				.then((storedValue) => {
 					if (storedValue != null) {
 						// If we have something in IDB, use that as the default
@@ -104,14 +163,12 @@ export function idbEffect<T>({
 				})
 				.catch((error) => {
 					// For production, handle or log error
-					console.error("Failed to read from IDB", error);
+					console.error("Failed during IDB init/cleanup/read", error);
 				});
 		}
 
 		// Listen for changes to the atom; write them to IndexedDB
 		onSet((newValue) => {
-			// Because this can be async, you might want to debounce
-			// or batch calls in real usage
 			writeToDB(newValue).catch((error) => {
 				console.error("Failed to write to IDB", error);
 			});

@@ -5,7 +5,10 @@ export default defineConfig({
 	outDir: "dist",
 	format: ["esm", "iife", "cjs"],
 	minify: true,
-	sourcemap: true,
+	clean: true,
+	cjsInterop: true,
+	shims: true,
 	dts: true,
 	external: ["react", "react-dom", "recoil"],
+	tsconfig: "tsconfig.build.json",
 });
