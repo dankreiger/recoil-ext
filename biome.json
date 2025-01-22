@@ -7,7 +7,14 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"ignore": ["dist", "node_modules", ".git", "docs", "tsconfig.build.json"]
+		"ignore": [
+			"dist",
+			"node_modules",
+			".git",
+			"docs",
+			"tsconfig.build.json",
+			"package.json"
+		]
 	},
 	"formatter": {
 		"enabled": true,
