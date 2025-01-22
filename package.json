@@ -1,6 +1,6 @@
 {
 	"name": "recoil-ext",
-	"version": "0.1.14",
+	"version": "0.1.15",
 	"description": "Strongly typed read-only object methods",
 	"keywords": [
 		"recoil",

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.15](https://github.com/dankreiger/recoil-ext/compare/v0.1.14...v0.1.15) (2025-01-22)
+
+
+### Bug Fixes
+
+* add effects to the input ([e1c9c08](https://github.com/dankreiger/recoil-ext/commit/e1c9c0830ae287a1827cc3040011f0e962548101))
+
 ## [0.1.14](https://github.com/dankreiger/recoil-ext/compare/v0.1.13...v0.1.14) (2025-01-22)
 
 
